@@ -12,7 +12,7 @@
   <header class="hud">
     <div class="hud-left">
       <a href="../index.html" class="btn-hud">← Beranda</a>
-      <span class="hud-logo">🐋 HLWOA</span>
+      <span class="hud-logo">HLWOA</span>
     </div>
 
     <!-- Strip alur timeline kontinu -->
@@ -25,7 +25,7 @@
     </div>
 
     <div class="hud-right">
-      <button class="btn-hud btn-icon" id="btn-info" title="Informasi Singkat">💡 Info</button>
+      <button class="btn-hud btn-icon" id="btn-info" title="Informasi Singkat">Info</button>
       <div class="hud-stat">
         <span class="stat-label">Makespan:</span>
         <strong class="stat-value" id="hud-makespan">72.0</strong>
@@ -43,11 +43,10 @@
       <!-- Tag zona & status di dalam canvas -->
       <div class="scene-overlay-top">
         <div class="zone-badge" id="heft-demo">
-          <span class="zone-icon">🛒</span>
           <span class="zone-text" id="zone-status-text">Zona Depan: Antrean Troli ke Kasir (HEFT)</span>
         </div>
         <div class="trap-note" id="trap-indicator">
-          ⚠️ Kasir Magang (VM3) kosong selesai 33.3s, Senior (VM1) selesai 20.0s → Pilih Senior!
+          Kasir Magang (VM3) kosong selesai 33.3s, Senior (VM1) selesai 20.0s → Pilih Senior!
         </div>
       </div>
 
@@ -67,13 +66,13 @@
 
       <!-- Catatan Metafora 3D -->
       <div class="meta-footnote">
-        ℹ️ Metafora 3D; ruang pencarian task scheduling asli berdimensi banyak.
+        Metafora 3D: ruang pencarian task scheduling asli berdimensi banyak.
       </div>
 
       <!-- Timeline Bar Bawah -->
       <div class="timeline-bar">
-        <button class="btn-play" id="btn-play-pause">▶ Putar</button>
-        <button class="btn-tool" id="btn-restart" title="Ulang">↺ Ulang</button>
+        <button class="btn-play" id="btn-play-pause">Putar</button>
+        <button class="btn-tool" id="btn-restart" title="Ulang">Ulang</button>
         <div class="timeline-track-wrap">
           <input type="range" min="0" max="1000" value="0" id="time-slider" class="timeline-slider" />
           <div class="timeline-ticks">
@@ -92,7 +91,7 @@
       <!-- Panel Grafik Konvergensi Langsung -->
       <div class="panel-card" id="convergence">
         <div class="card-head">
-          <h3>📈 Grafik Konvergensi Langsung</h3>
+          <h3>Grafik Konvergensi Langsung</h3>
           <span class="badge-live">LIVE</span>
         </div>
         <div class="chart-box" id="conv-chart-svg"></div>
@@ -106,14 +105,14 @@
       <!-- Panel Kontrol Parameter & Mode -->
       <div class="panel-card" id="controls">
         <div class="card-head">
-          <h3>🎮 Kontrol Interaktif</h3>
+          <h3>Kontrol Interaktif</h3>
         </div>
 
         <div class="control-row">
           <label>Mulai Populasi Dari:</label>
           <div class="toggle-group">
-            <button class="btn-toggle active" id="toggle-mode-heft">⭐ HEFT (Hybrid)</button>
-            <button class="btn-toggle" id="toggle-mode-random">🎲 Acak (Meta Saja)</button>
+            <button class="btn-toggle active" id="toggle-mode-heft">HEFT (Hybrid)</button>
+            <button class="btn-toggle" id="toggle-mode-random">Acak (Meta Saja)</button>
           </div>
         </div>
 
@@ -142,7 +141,7 @@
       <!-- Kartu Bukti Dampak -->
       <div class="panel-card impact-card">
         <div class="card-head">
-          <h3>🏆 Bukti Dampak Makespan</h3>
+          <h3>Bukti Dampak Makespan</h3>
         </div>
         <div class="impact-grid">
           <div class="impact-col">
@@ -169,8 +168,8 @@
   <div class="intro-overlay" id="intro">
     <div class="intro-box">
       <div class="intro-header">
-        <h2>🐋 HLWOA = HEFT + WOA + Lévy Flight</h2>
-        <button class="btn-close-intro" id="btn-close-intro">✕</button>
+        <h2>HLWOA = HEFT + WOA + Lévy Flight</h2>
+        <button class="btn-close-intro" id="btn-close-intro">Tutup</button>
       </div>
       <p>
         <strong>Analogi Antrean Kasir:</strong> Task adalah troli belanjaan dengan ukuran berbeda,
@@ -182,7 +181,7 @@
         Paus mengepung dan membuat spiral gelembung, dibantu <strong>Lévy Flight</strong> untuk
         melompat keluar dari jebakan lokal hingga menemukan makespan terendah.
       </p>
-      <button class="btn-play btn-modal-start" id="btn-start-intro">Mulai Eksplorasi 🚀</button>
+      <button class="btn-play btn-modal-start" id="btn-start-intro">Mulai Eksplorasi</button>
     </div>
   </div>
 
@@ -191,7 +190,7 @@
 
   <!-- Banner Permanen Prototipe -->
   <footer class="proto-banner">
-    🚧 PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
+    PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

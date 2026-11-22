@@ -76,8 +76,8 @@
     .card.whale { --c1: #0077b6; --c2: #48cae4; background: rgba(0, 119, 182, 0.14); }
     .card.cat   { --c1: #e76f51; --c2: #f4a261; background: rgba(231, 111, 81, 0.14); }
     .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 16px 36px rgba(0,0,0,0.45); }
-    .mascot { font-size: 4.8rem; line-height: 1; margin-bottom: 0.6rem; transition: transform 0.3s; }
-    .card:hover .mascot { transform: scale(1.15) rotate(-6deg); }
+    .mascot { font-family: 'Fredoka One', cursive; font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 0.8rem; color: var(--c2); transition: transform 0.3s; }
+    .card:hover .mascot { transform: scale(1.1); }
     .card h2 { font-family: 'Fredoka One', cursive; font-size: 1.55rem; margin-bottom: 0.3rem; }
     .card p { font-size: 0.88rem; color: #b0bec5; margin-bottom: 1.2rem; line-height: 1.4; }
     .play-btn {
@@ -110,25 +110,25 @@
 <body>
   <div class="particles" id="particles"></div>
   <div class="container">
-    <h1 class="title">⚡ Hybrid Task Scheduling</h1>
+    <h1 class="title">Hybrid Task Scheduling</h1>
     <p class="subtitle">Eksplorasi Interaktif Satu Layar: Antrean Kasir HEFT & Metaheuristik</p>
     <div class="cards">
       <a class="card whale" href="hlwoa/index.html">
-        <div class="mascot">🐋</div>
+        <div class="mascot">HLWOA</div>
         <h2>HLWOA</h2>
         <p>HEFT + Whale Optimization Algorithm + Lévy Flight</p>
-        <span class="play-btn">▶ Buka Satu Layar</span>
+        <span class="play-btn">Buka Satu Layar</span>
       </a>
       <a class="card cat" href="hc-cso/index.html">
-        <div class="mascot">🐱</div>
+        <div class="mascot">HC-CSO</div>
         <h2>HC-CSO</h2>
         <p>HEFT + Cat Swarm Optimization (Seeking & Tracing)</p>
-        <span class="play-btn">▶ Buka Satu Layar</span>
+        <span class="play-btn">Buka Satu Layar</span>
       </a>
     </div>
   </div>
   <footer class="proto-footer">
-    🚧 PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
+    PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
   </footer>
   <script>
     const pc = document.getElementById('particles');

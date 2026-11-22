@@ -339,7 +339,7 @@ function initMiniGanttDom() {
     card.id = `mini-gantt-${i}`;
     card.innerHTML = `
       <div class="animal-gantt-header ${i === 0 ? 'heft-label' : ''}">
-        <span>${i === 0 ? '⭐ HEFT' : `Paus #${i+1}`}</span>
+        <span>${i === 0 ? 'HEFT' : `Paus #${i+1}`}</span>
       </div>
       <div class="mini-gantt-lanes">
         <div class="mini-lane"><span class="mini-segment s1" style="background:#0077b6; width:70%"></span></div>
@@ -682,7 +682,7 @@ export function initControls() {
   const playBtn = $('#btn-play-pause');
   playBtn?.addEventListener('click', () => {
     isPlaying = !isPlaying;
-    playBtn.textContent = isPlaying ? '⏸ Jeda' : '▶ Putar';
+    playBtn.textContent = isPlaying ? 'Jeda' : 'Putar';
   });
 
   // Ulang
@@ -695,7 +695,7 @@ export function initControls() {
   const timeSlider = $('#time-slider');
   timeSlider?.addEventListener('input', () => {
     isPlaying = false;
-    playBtn.textContent = '▶ Putar';
+    playBtn.textContent = 'Putar';
     updateTimeline(timeSlider.value / 1000);
   });
 
