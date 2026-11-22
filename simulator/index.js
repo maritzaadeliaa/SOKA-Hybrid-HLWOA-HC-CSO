@@ -18,7 +18,7 @@ export { run } from './runner.js';
 
 // Tahap 2: Algoritma & Batch Runner
 export { runHeft } from './algorithms/heftRunner.js';
-export { runHLWOA } from './algorithms/hlwoa.js';
+export { runHLWOA, runHLWOANoLevy, runWOA } from './algorithms/hlwoa.js';
 export { runHCCSO } from './algorithms/hccso.js';
 export { runTS } from './algorithms/tabuSearch.js';
 export { runFPA } from './algorithms/flowerPollination.js';

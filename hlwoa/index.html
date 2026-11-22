@@ -28,7 +28,7 @@
       <button class="btn-hud btn-icon" id="btn-info" title="Informasi Singkat">Info</button>
       <div class="hud-stat">
         <span class="stat-label">Makespan:</span>
-        <strong class="stat-value" id="hud-makespan">72.0</strong>
+        <strong class="stat-value" id="hud-makespan">…</strong>
       </div>
     </div>
   </header>
@@ -46,7 +46,7 @@
           <span class="zone-text" id="zone-status-text">Zona Depan: Antrean Troli ke Kasir (HEFT)</span>
         </div>
         <div class="trap-note" id="trap-indicator">
-          Kasir Magang (VM3) kosong selesai 33.3s, Senior (VM1) selesai 20.0s → Pilih Senior!
+          HEFT memilih kasir dengan waktu selesai paling awal, bukan yang sekadar kosong.
         </div>
       </div>
 
@@ -61,7 +61,7 @@
           <span class="fly-bar b2"></span>
           <span class="fly-bar b3"></span>
         </div>
-        <span class="fly-ms">72.0</span>
+        <span class="fly-ms">…</span>
       </div>
 
       <!-- Catatan Metafora 3D -->
@@ -96,9 +96,9 @@
         </div>
         <div class="chart-box" id="conv-chart-svg"></div>
         <div class="chart-legend">
-          <div class="leg-item"><span class="leg-color leg-hybrid"></span> Hybrid HLWOA</div>
+          <div class="leg-item"><span class="leg-color leg-hybrid"></span> <span id="leg-hybrid-text">Hybrid HLWOA</span></div>
           <div class="leg-item"><span class="leg-color leg-meta"></span> WOA Saja</div>
-          <div class="leg-item"><span class="leg-color leg-heft"></span> HEFT Saja (72.0)</div>
+          <div class="leg-item"><span class="leg-color leg-heft"></span> <span id="leg-heft-text">HEFT Saja</span></div>
         </div>
       </div>
 
@@ -146,20 +146,21 @@
         <div class="impact-grid">
           <div class="impact-col">
             <span class="imp-title">HEFT Saja</span>
-            <span class="imp-val" id="val-heft-only">72.0</span>
+            <span class="imp-val" id="val-heft-only">…</span>
             <span class="imp-note">Jadwal awal greedy</span>
           </div>
           <div class="impact-col">
             <span class="imp-title">WOA Saja</span>
-            <span class="imp-val" id="val-woa-only">63.4</span>
-            <span class="imp-note">Populasi acak</span>
+            <span class="imp-val" id="val-woa-only">…</span>
+            <span class="imp-note">Populasi acak, tanpa Lévy</span>
           </div>
           <div class="impact-col best-col">
-            <span class="imp-title">Hybrid HLWOA</span>
-            <span class="imp-val highlight" id="val-hybrid">52.8</span>
-            <span class="imp-badge">-26.7% vs HEFT</span>
+            <span class="imp-title" id="imp-title-hybrid">Hybrid HLWOA</span>
+            <span class="imp-val highlight" id="val-hybrid">…</span>
+            <span class="imp-badge" id="imp-badge-hybrid">…</span>
           </div>
         </div>
+        <p class="impact-foot" id="impact-foot"></p>
       </div>
     </aside>
   </main>
@@ -190,7 +191,7 @@
 
   <!-- Banner Permanen Prototipe -->
   <footer class="proto-banner">
-    PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
+    HASIL SEMENTARA: data nyata dari algoritma pada instance demo, bukan dataset minggu 3.
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

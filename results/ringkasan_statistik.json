@@ -1,61 +1,61 @@
 {
-  "generatedAt": "2026-11-22T07:47:57.876Z",
+  "generatedAt": "2026-11-22T08:59:26.431Z",
   "description": "Laporan Statistik Komprehensif Seluruh Dataset (GoCJ & Sintetik 100-1000 tasks) untuk Demo 1 SOKA",
   "totalRunsPerMethod": 200,
   "summaryGlobal": {
     "HLWOA": {
       "makespan": {
-        "mean": 1760.0276,
-        "std": 1681.5679,
-        "median": 859.9794,
-        "min": 93.5584,
+        "mean": 1760.2494,
+        "std": 1681.6441,
+        "median": 859.9828,
+        "min": 93.7987,
         "max": 5452.4,
-        "iqr": 2390.8914,
+        "iqr": 2391.1354,
         "count": 200
       },
       "waiting": {
-        "mean": 853.4845,
-        "std": 818.2901,
-        "median": 419.1509,
-        "min": 38.1947,
+        "mean": 853.4815,
+        "std": 818.3594,
+        "median": 419.2243,
+        "min": 38.6648,
         "max": 2602.8342,
-        "iqr": 1182.9052,
+        "iqr": 1182.4875,
         "count": 200
       },
       "imbalance": {
         "mean": 0.0064,
-        "std": 0.0071,
-        "median": 0.0029,
-        "min": 0.0004,
-        "max": 0.0294,
-        "iqr": 0.007,
+        "std": 0.0069,
+        "median": 0.0035,
+        "min": 0.0005,
+        "max": 0.028,
+        "iqr": 0.0069,
         "count": 200
       },
       "utilization": {
-        "mean": 0.9975,
-        "std": 0.0029,
-        "median": 0.9989,
+        "mean": 0.9973,
+        "std": 0.0031,
+        "median": 0.9988,
         "min": 0.9877,
-        "max": 0.9998,
-        "iqr": 0.0021,
+        "max": 0.9997,
+        "iqr": 0.0022,
         "count": 200
       },
       "cost": {
-        "mean": 1666306.0081,
-        "std": 1593152.9497,
-        "median": 814927.8133,
-        "min": 88152.2133,
+        "mean": 1666318.8414,
+        "std": 1593151.4868,
+        "median": 814947.1904,
+        "min": 88182.2883,
         "max": 5165276.25,
-        "iqr": 2264060.7664,
+        "iqr": 2264089.6165,
         "count": 200
       },
       "timeMs": {
-        "mean": 31.5892,
-        "std": 15.7543,
-        "median": 29.8165,
-        "min": 6.538,
-        "max": 90.932,
-        "iqr": 24.9445,
+        "mean": 67.6768,
+        "std": 36.2861,
+        "median": 66.798,
+        "min": 10.733,
+        "max": 157.942,
+        "iqr": 60.306,
         "count": 200
       }
     },
@@ -106,12 +106,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 17.2773,
-        "std": 8.9447,
-        "median": 15.702,
-        "min": 3.873,
-        "max": 42.688,
-        "iqr": 13.5785,
+        "mean": 10.6914,
+        "std": 5.6572,
+        "median": 9.7145,
+        "min": 2.519,
+        "max": 31.396,
+        "iqr": 8.9268,
         "count": 200
       }
     },
@@ -162,12 +162,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 15.7873,
-        "std": 8.9755,
-        "median": 14.7625,
-        "min": 3.399,
-        "max": 53.898,
-        "iqr": 15.3712,
+        "mean": 8.9588,
+        "std": 5.0446,
+        "median": 8.041,
+        "min": 2.1,
+        "max": 28.823,
+        "iqr": 7.4728,
         "count": 200
       }
     },
@@ -218,12 +218,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 29.5072,
-        "std": 15.1497,
-        "median": 28.035,
-        "min": 5.68,
-        "max": 78.649,
-        "iqr": 22.9942,
+        "mean": 18.8969,
+        "std": 10.3234,
+        "median": 18.9075,
+        "min": 3.4,
+        "max": 61.524,
+        "iqr": 15.3725,
         "count": 200
       }
     },
@@ -274,12 +274,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 0.1559,
-        "std": 0.0933,
-        "median": 0.142,
-        "min": 0.017,
-        "max": 0.495,
-        "iqr": 0.166,
+        "mean": 0.1245,
+        "std": 0.1556,
+        "median": 0.097,
+        "min": 0.01,
+        "max": 1.959,
+        "iqr": 0.1203,
         "count": 200
       }
     }
@@ -291,12 +291,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1760.0276,
-          "std": 1681.5679,
-          "median": 859.9794,
-          "min": 93.5584,
+          "mean": 1760.2494,
+          "std": 1681.6441,
+          "median": 859.9828,
+          "min": 93.7987,
           "max": 5452.4,
-          "iqr": 2390.8914,
+          "iqr": 2391.1354,
           "count": 200
         },
         "methodB": {
@@ -312,30 +312,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20579.5,
-          "u2": 19420.5,
-          "uStat": 19420.5,
-          "rSum1": 40679.5,
-          "rSum2": 39520.5,
-          "zScore": 0.5009,
-          "pValue": 0.616416,
+          "u1": 20840,
+          "u2": 19160,
+          "uStat": 19160,
+          "rSum1": 40940,
+          "rSum2": 39260,
+          "zScore": 0.7263,
+          "pValue": 0.467631,
           "significant": false,
-          "effectSizeR": 0.025,
-          "rankBiserialCorr": -0.029
+          "effectSizeR": 0.0363,
+          "rankBiserialCorr": -0.042
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik makespan (p = 0.616416 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik makespan (p = 0.467631 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1666306.0081,
-          "std": 1593152.9497,
-          "median": 814927.8133,
-          "min": 88152.2133,
+          "mean": 1666318.8414,
+          "std": 1593151.4868,
+          "median": 814947.1904,
+          "min": 88182.2883,
           "max": 5165276.25,
-          "iqr": 2264060.7664,
+          "iqr": 2264089.6165,
           "count": 200
         },
         "methodB": {
@@ -351,30 +351,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19991.5,
-          "u2": 20008.5,
-          "uStat": 19991.5,
-          "rSum1": 40091.5,
-          "rSum2": 40108.5,
-          "zScore": -0.0069,
-          "pValue": 0.994478,
+          "u1": 20080,
+          "u2": 19920,
+          "uStat": 19920,
+          "rSum1": 40180,
+          "rSum2": 40020,
+          "zScore": 0.0688,
+          "pValue": 0.945162,
           "significant": false,
-          "effectSizeR": 0.0003,
-          "rankBiserialCorr": 0.0004
+          "effectSizeR": 0.0034,
+          "rankBiserialCorr": -0.004
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik cost (p = 0.994478 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik cost (p = 0.945162 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HLWOA",
           "mean": 0.0064,
-          "std": 0.0071,
-          "median": 0.0029,
-          "min": 0.0004,
-          "max": 0.0294,
-          "iqr": 0.007,
+          "std": 0.0069,
+          "median": 0.0035,
+          "min": 0.0005,
+          "max": 0.028,
+          "iqr": 0.0069,
           "count": 200
         },
         "methodB": {
@@ -390,19 +390,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20229,
-          "u2": 19771,
-          "uStat": 19771,
-          "rSum1": 40329,
-          "rSum2": 39871,
-          "zScore": 0.1978,
-          "pValue": 0.843195,
+          "u1": 20700,
+          "u2": 19300,
+          "uStat": 19300,
+          "rSum1": 40800,
+          "rSum2": 39400,
+          "zScore": 0.6056,
+          "pValue": 0.544784,
           "significant": false,
-          "effectSizeR": 0.0099,
-          "rankBiserialCorr": -0.0114
+          "effectSizeR": 0.0303,
+          "rankBiserialCorr": -0.035
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik imbalance (p = 0.843195 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik imbalance (p = 0.544784 >= 0.05)."
       }
     },
     {
@@ -411,12 +411,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1760.0276,
-          "std": 1681.5679,
-          "median": 859.9794,
-          "min": 93.5584,
+          "mean": 1760.2494,
+          "std": 1681.6441,
+          "median": 859.9828,
+          "min": 93.7987,
           "max": 5452.4,
-          "iqr": 2390.8914,
+          "iqr": 2391.1354,
           "count": 200
         },
         "methodB": {
@@ -432,30 +432,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19635,
-          "u2": 20365,
-          "uStat": 19635,
-          "rSum1": 39735,
-          "rSum2": 40465,
-          "zScore": -0.3155,
-          "pValue": 0.752375,
+          "u1": 20000,
+          "u2": 20000,
+          "uStat": 20000,
+          "rSum1": 40100,
+          "rSum2": 40100,
+          "zScore": 0,
+          "pValue": 1,
           "significant": false,
-          "effectSizeR": 0.0158,
-          "rankBiserialCorr": 0.0182
+          "effectSizeR": 0,
+          "rankBiserialCorr": 0
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HEFT pada metrik makespan (p = 0.752375 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HEFT pada metrik makespan (p = 1 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1666306.0081,
-          "std": 1593152.9497,
-          "median": 814927.8133,
-          "min": 88152.2133,
+          "mean": 1666318.8414,
+          "std": 1593151.4868,
+          "median": 814947.1904,
+          "min": 88182.2883,
           "max": 5165276.25,
-          "iqr": 2264060.7664,
+          "iqr": 2264089.6165,
           "count": 200
         },
         "methodB": {
@@ -471,30 +471,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19915,
-          "u2": 20085,
-          "uStat": 19915,
-          "rSum1": 40015,
-          "rSum2": 40185,
-          "zScore": -0.0731,
-          "pValue": 0.941693,
+          "u1": 20000,
+          "u2": 20000,
+          "uStat": 20000,
+          "rSum1": 40100,
+          "rSum2": 40100,
+          "zScore": 0,
+          "pValue": 1,
           "significant": false,
-          "effectSizeR": 0.0037,
-          "rankBiserialCorr": 0.0042
+          "effectSizeR": 0,
+          "rankBiserialCorr": 0
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HEFT pada metrik cost (p = 0.941693 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HEFT pada metrik cost (p = 1 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HLWOA",
           "mean": 0.0064,
-          "std": 0.0071,
-          "median": 0.0029,
-          "min": 0.0004,
-          "max": 0.0294,
-          "iqr": 0.007,
+          "std": 0.0069,
+          "median": 0.0035,
+          "min": 0.0005,
+          "max": 0.028,
+          "iqr": 0.0069,
           "count": 200
         },
         "methodB": {
@@ -510,19 +510,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19455,
-          "u2": 20545,
-          "uStat": 19455,
-          "rSum1": 39555,
-          "rSum2": 40645,
-          "zScore": -0.4717,
-          "pValue": 0.637172,
+          "u1": 20000,
+          "u2": 20000,
+          "uStat": 20000,
+          "rSum1": 40100,
+          "rSum2": 40100,
+          "zScore": 0,
+          "pValue": 1,
           "significant": false,
-          "effectSizeR": 0.0236,
-          "rankBiserialCorr": 0.0272
+          "effectSizeR": 0,
+          "rankBiserialCorr": 0
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HEFT pada metrik imbalance (p = 0.637172 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HEFT pada metrik imbalance (p = 1 >= 0.05)."
       }
     },
     {
@@ -651,12 +651,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1760.0276,
-          "std": 1681.5679,
-          "median": 859.9794,
-          "min": 93.5584,
+          "mean": 1760.2494,
+          "std": 1681.6441,
+          "median": 859.9828,
+          "min": 93.7987,
           "max": 5452.4,
-          "iqr": 2390.8914,
+          "iqr": 2391.1354,
           "count": 200
         },
         "methodB": {
@@ -672,30 +672,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19970.5,
-          "u2": 20029.5,
-          "uStat": 19970.5,
-          "rSum1": 40070.5,
-          "rSum2": 40129.5,
-          "zScore": -0.0251,
-          "pValue": 0.979979,
+          "u1": 20340,
+          "u2": 19660,
+          "uStat": 19660,
+          "rSum1": 40440,
+          "rSum2": 39760,
+          "zScore": 0.2939,
+          "pValue": 0.768853,
           "significant": false,
-          "effectSizeR": 0.0013,
-          "rankBiserialCorr": 0.0015
+          "effectSizeR": 0.0147,
+          "rankBiserialCorr": -0.017
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan TS pada metrik makespan (p = 0.979979 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan TS pada metrik makespan (p = 0.768853 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1666306.0081,
-          "std": 1593152.9497,
-          "median": 814927.8133,
-          "min": 88152.2133,
+          "mean": 1666318.8414,
+          "std": 1593151.4868,
+          "median": 814947.1904,
+          "min": 88182.2883,
           "max": 5165276.25,
-          "iqr": 2264060.7664,
+          "iqr": 2264089.6165,
           "count": 200
         },
         "methodB": {
@@ -711,30 +711,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20015.5,
-          "u2": 19984.5,
-          "uStat": 19984.5,
-          "rSum1": 40115.5,
-          "rSum2": 40084.5,
-          "zScore": 0.013,
-          "pValue": 0.989644,
+          "u1": 20065,
+          "u2": 19935,
+          "uStat": 19935,
+          "rSum1": 40165,
+          "rSum2": 40035,
+          "zScore": 0.0558,
+          "pValue": 0.955476,
           "significant": false,
-          "effectSizeR": 0.0006,
-          "rankBiserialCorr": -0.0008
+          "effectSizeR": 0.0028,
+          "rankBiserialCorr": -0.0032
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan TS pada metrik cost (p = 0.989644 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan TS pada metrik cost (p = 0.955476 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HLWOA",
           "mean": 0.0064,
-          "std": 0.0071,
-          "median": 0.0029,
-          "min": 0.0004,
-          "max": 0.0294,
-          "iqr": 0.007,
+          "std": 0.0069,
+          "median": 0.0035,
+          "min": 0.0005,
+          "max": 0.028,
+          "iqr": 0.0069,
           "count": 200
         },
         "methodB": {
@@ -750,19 +750,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19285.5,
-          "u2": 20714.5,
-          "uStat": 19285.5,
-          "rSum1": 39385.5,
-          "rSum2": 40814.5,
-          "zScore": -0.6183,
-          "pValue": 0.536388,
+          "u1": 19815,
+          "u2": 20185,
+          "uStat": 19815,
+          "rSum1": 39915,
+          "rSum2": 40285,
+          "zScore": -0.1598,
+          "pValue": 0.87302,
           "significant": false,
-          "effectSizeR": 0.0309,
-          "rankBiserialCorr": 0.0357
+          "effectSizeR": 0.008,
+          "rankBiserialCorr": 0.0092
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan TS pada metrik imbalance (p = 0.536388 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan TS pada metrik imbalance (p = 0.87302 >= 0.05)."
       }
     },
     {
@@ -891,12 +891,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1760.0276,
-          "std": 1681.5679,
-          "median": 859.9794,
-          "min": 93.5584,
+          "mean": 1760.2494,
+          "std": 1681.6441,
+          "median": 859.9828,
+          "min": 93.7987,
           "max": 5452.4,
-          "iqr": 2390.8914,
+          "iqr": 2391.1354,
           "count": 200
         },
         "methodB": {
@@ -912,30 +912,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20813,
-          "u2": 19187,
-          "uStat": 19187,
-          "rSum1": 40913,
-          "rSum2": 39287,
-          "zScore": 0.7029,
-          "pValue": 0.482125,
+          "u1": 20915,
+          "u2": 19085,
+          "uStat": 19085,
+          "rSum1": 41015,
+          "rSum2": 39185,
+          "zScore": 0.7912,
+          "pValue": 0.428839,
           "significant": false,
-          "effectSizeR": 0.0351,
-          "rankBiserialCorr": -0.0407
+          "effectSizeR": 0.0396,
+          "rankBiserialCorr": -0.0457
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan FPA pada metrik makespan (p = 0.482125 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan FPA pada metrik makespan (p = 0.428839 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HLWOA",
-          "mean": 1666306.0081,
-          "std": 1593152.9497,
-          "median": 814927.8133,
-          "min": 88152.2133,
+          "mean": 1666318.8414,
+          "std": 1593151.4868,
+          "median": 814947.1904,
+          "min": 88182.2883,
           "max": 5165276.25,
-          "iqr": 2264060.7664,
+          "iqr": 2264089.6165,
           "count": 200
         },
         "methodB": {
@@ -951,30 +951,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20210.5,
-          "u2": 19789.5,
-          "uStat": 19789.5,
-          "rSum1": 40310.5,
-          "rSum2": 39889.5,
-          "zScore": 0.1817,
-          "pValue": 0.85585,
+          "u1": 20240,
+          "u2": 19760,
+          "uStat": 19760,
+          "rSum1": 40340,
+          "rSum2": 39860,
+          "zScore": 0.2072,
+          "pValue": 0.835854,
           "significant": false,
-          "effectSizeR": 0.0091,
-          "rankBiserialCorr": -0.0105
+          "effectSizeR": 0.0104,
+          "rankBiserialCorr": -0.012
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan FPA pada metrik cost (p = 0.85585 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan FPA pada metrik cost (p = 0.835854 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HLWOA",
           "mean": 0.0064,
-          "std": 0.0071,
-          "median": 0.0029,
-          "min": 0.0004,
-          "max": 0.0294,
-          "iqr": 0.007,
+          "std": 0.0069,
+          "median": 0.0035,
+          "min": 0.0005,
+          "max": 0.028,
+          "iqr": 0.0069,
           "count": 200
         },
         "methodB": {
@@ -990,19 +990,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 21323.5,
-          "u2": 18676.5,
-          "uStat": 18676.5,
-          "rSum1": 41423.5,
-          "rSum2": 38776.5,
-          "zScore": 1.145,
-          "pValue": 0.252219,
+          "u1": 21665,
+          "u2": 18335,
+          "uStat": 18335,
+          "rSum1": 41765,
+          "rSum2": 38435,
+          "zScore": 1.4407,
+          "pValue": 0.149683,
           "significant": false,
-          "effectSizeR": 0.0572,
-          "rankBiserialCorr": -0.0662
+          "effectSizeR": 0.072,
+          "rankBiserialCorr": -0.0833
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan FPA pada metrik imbalance (p = 0.252219 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan FPA pada metrik imbalance (p = 0.149683 >= 0.05)."
       }
     },
     {
