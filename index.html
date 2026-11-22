@@ -4,61 +4,61 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SOKA — Hybrid Task Scheduling</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: #f5f5f5;
-      color: #222;
-    }
-    h1 { margin-bottom: 0.25em; }
-    p  { margin-top: 0; color: #555; }
-    .cards {
-      display: flex;
-      gap: 2rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .card {
-      text-decoration: none;
-      color: inherit;
-      background: #fff;
-      border: 2px solid #ddd;
-      border-radius: 1rem;
-      padding: 2rem 3rem;
-      text-align: center;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    }
-    .card .emoji { font-size: 4rem; }
-    .card .label { font-size: 1.1rem; font-weight: 600; margin-top: 0.5rem; }
-    .card .sub   { font-size: 0.85rem; color: #777; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0a2e 0%,#1a1a4e 40%,#0d2137 100%);color:#e0e0e0;overflow:hidden;position:relative}
+    /* Partikel mengambang */
+    .particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .p{position:absolute;border-radius:50%;background:rgba(255,255,255,.15);animation:floatUp linear infinite}
+    @keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+    .container{position:relative;z-index:1;text-align:center;padding:2rem}
+    .title{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,3.5rem);background:linear-gradient(90deg,#48cae4,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.25rem;text-shadow:none}
+    .subtitle{color:#9e9e9e;font-size:1rem;margin-bottom:2.5rem}
+    .cards{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+    .card{text-decoration:none;color:#e0e0e0;border-radius:1.25rem;padding:2.5rem 2.5rem 2rem;text-align:center;width:280px;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;inset:0;border-radius:1.25rem;padding:2px;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+    .card.whale{--c1:#0077b6;--c2:#48cae4;background:rgba(0,119,182,.12)}
+    .card.cat{--c1:#e76f51;--c2:#f4a261;background:rgba(231,111,81,.12)}
+    .card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+    .mascot{font-size:5rem;line-height:1;margin-bottom:.5rem;transition:transform .3s}
+    .card:hover .mascot{transform:scale(1.15) rotate(-5deg)}
+    .card h2{font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:.25rem}
+    .card p{font-size:.85rem;color:#aaa;margin-bottom:1rem}
+    .play-btn{display:inline-block;padding:.5rem 1.5rem;border-radius:2rem;font-weight:700;font-size:.9rem;transition:background .2s}
+    .whale .play-btn{background:#0077b6;color:#fff}
+    .whale:hover .play-btn{background:#00b4d8}
+    .cat .play-btn{background:#e76f51;color:#fff}
+    .cat:hover .play-btn{background:#f4a261}
+    .footer-note{margin-top:3rem;font-size:.75rem;color:#666;letter-spacing:.5px}
+    @media(max-width:620px){.cards{flex-direction:column;align-items:center}.card{width:90%}}
   </style>
 </head>
 <body>
-  <h1>Hybrid Task Scheduling</h1>
-  <p>Pilih algoritma untuk dijelajahi:</p>
-
-  <div class="cards">
-    <a class="card" href="hlwoa/index.html">
-      <div class="emoji">🐋</div>
-      <div class="label">HLWOA</div>
-      <div class="sub">HEFT + Whale Optimization + Lévy Flight</div>
-    </a>
-    <a class="card" href="hc-cso/index.html">
-      <div class="emoji">🐱</div>
-      <div class="label">HC-CSO</div>
-      <div class="sub">HEFT + Cat Swarm Optimization</div>
-    </a>
+  <div class="particles" id="particles"></div>
+  <div class="container">
+    <h1 class="title">⚡ Hybrid Task Scheduling</h1>
+    <p class="subtitle">Mata Kuliah SOKA — Penjadwalan VM dengan Metaheuristik</p>
+    <div class="cards">
+      <a class="card whale" href="hlwoa/index.html">
+        <div class="mascot">🐋</div>
+        <h2>HLWOA</h2>
+        <p>HEFT + Whale Optimization + Lévy Flight</p>
+        <span class="play-btn">▶ Mainkan</span>
+      </a>
+      <a class="card cat" href="hc-cso/index.html">
+        <div class="mascot">🐱</div>
+        <h2>HC-CSO</h2>
+        <p>HEFT + Cat Swarm Optimization</p>
+        <span class="play-btn">▶ Mainkan</span>
+      </a>
+    </div>
+    <p class="footer-note">🚧 Prototipe Tampilan — Data Tiruan</p>
   </div>
+  <script>
+    // Buat partikel mengambang
+    const pc=document.getElementById('particles');
+    for(let i=0;i<30;i++){const d=document.createElement('div');d.className='p';const s=Math.random()*4+2;d.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*6}s`;pc.appendChild(d)}
+  </script>
 </body>
 </html>

@@ -4,52 +4,132 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HLWOA — HEFT + Whale Optimization + Lévy Flight</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header>
-    <h1>🐋 HLWOA</h1>
-    <p>HEFT + Whale Optimization Algorithm + Lévy Flight</p>
-    <a href="../index.html" class="btn-back">← Kembali</a>
-  </header>
+  <!-- Banner permanen -->
+  <div class="proto-banner">🚧 PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma</div>
+
+  <!-- HUD atas -->
+  <nav class="hud">
+    <a href="../index.html" class="hud-btn">← Kembali</a>
+    <span class="hud-title">🐋 HLWOA</span>
+    <span class="hud-stat">Makespan: <strong id="makespan-val">57.3</strong></span>
+    <div class="hud-progress"><div class="hud-progress-fill" id="progress-bar"></div></div>
+    <span class="hud-stat" id="iter-label">Iterasi: 0 / 50</span>
+  </nav>
+
+  <!-- Stepper level -->
+  <div class="stepper">
+    <div class="step locked" title="Segera hadir"><span class="lock">🔒</span> 1. Tutorial</div>
+    <div class="step locked" title="Segera hadir"><span class="lock">🔒</span> 2. Manual</div>
+    <div class="step active" data-target="heft-demo">3. Tebakan HEFT</div>
+    <div class="step active" data-target="meta-demo">4. Hewan Beraksi</div>
+    <div class="step locked" title="Segera hadir"><span class="lock">🔒</span> 5. Boss Battle</div>
+  </div>
 
   <main>
+    <!-- SECTION 1: Intro -->
     <section id="intro">
-      <h2>Pendahuluan</h2>
-      <!-- TODO: penjelasan singkat algoritma -->
+      <h2>🐋 HLWOA = HEFT + WOA + Lévy Flight</h2>
+      <p><strong>Analogi Piring Kotor:</strong> Bayangkan ada tumpukan piring kotor (task)
+         yang harus dicuci oleh beberapa pencuci (VM) dengan kecepatan berbeda-beda.
+         <em>Makespan</em> adalah waktu orang <strong>terlama</strong> selesai mencuci.
+         Tujuan kita: membagi piring supaya semua selesai secepat mungkin!</p>
+      <p>HEFT memberi pembagian awal yang bagus, lalu paus-paus (WOA) berenang mencari
+         pembagian yang lebih baik. Lévy Flight memungkinkan paus melompat jauh agar tidak
+         terjebak di area yang sudah dijelajahi.</p>
     </section>
 
+    <!-- SECTION 2: Demo HEFT -->
     <section id="heft-demo">
-      <h2>Demo HEFT</h2>
-      <!-- TODO: visualisasi langkah HEFT -->
+      <h2>📦 Demo HEFT — Jadwal Awal</h2>
+      <p>Tekan tombol untuk memasukkan task terbesar ke VM yang selesai paling awal.</p>
+      <div class="heft-container">
+        <div class="task-queue" id="task-queue"></div>
+        <div class="vm-lanes" id="vm-lanes">
+          <div class="vm-lane"><span class="vm-label">VM 1</span><div class="lane-bar" data-vm="0"></div></div>
+          <div class="vm-lane"><span class="vm-label">VM 2</span><div class="lane-bar" data-vm="1"></div></div>
+          <div class="vm-lane"><span class="vm-label">VM 3</span><div class="lane-bar" data-vm="2"></div></div>
+        </div>
+      </div>
+      <button class="btn-game" id="heft-step-btn">▶ Langkah berikutnya</button>
+      <button class="btn-game btn-secondary" id="heft-reset-btn">↺ Reset</button>
     </section>
 
+    <!-- SECTION 3: Demo Meta (3D) -->
     <section id="meta-demo">
-      <h2>Demo WOA + Lévy Flight</h2>
-      <!-- TODO: visualisasi iterasi metaheuristik -->
+      <h2>🌊 Demo WOA + Lévy Flight</h2>
+      <div id="three-container"></div>
+      <p class="meta-note">ℹ️ Ini metafora tiga dimensi; ruang pencarian asli berdimensi banyak.</p>
+      <div class="meta-buttons">
+        <button class="btn-game" id="btn-encircle">🔵 Mengepung</button>
+        <button class="btn-game" id="btn-spiral">🌀 Spiral Bubble-net</button>
+        <button class="btn-game" id="btn-levy">🚀 Lompat Jauh (Lévy)</button>
+      </div>
     </section>
 
+    <!-- SECTION 4: Gantt -->
     <section id="gantt">
-      <h2>Gantt Chart</h2>
-      <!-- TODO: canvas / SVG Gantt -->
+      <h2>📊 Gantt Chart</h2>
+      <div class="gantt-tabs">
+        <button class="gantt-tab active" data-tab="heft">Tebakan HEFT</button>
+        <button class="gantt-tab" data-tab="hybrid">Setelah Hybrid</button>
+      </div>
+      <div class="gantt-chart" id="gantt-chart"></div>
+      <div class="gantt-legend" id="gantt-legend"></div>
     </section>
 
+    <!-- SECTION 5: Konvergensi -->
     <section id="convergence">
-      <h2>Kurva Konvergensi</h2>
-      <!-- TODO: grafik makespan vs iterasi -->
+      <h2>📈 Kurva Konvergensi</h2>
+      <div id="conv-chart"></div>
     </section>
 
+    <!-- SECTION 6: Kontrol -->
     <section id="controls">
-      <h2>Kontrol Parameter</h2>
-      <!-- TODO: slider & input -->
+      <h2>🎮 Kontrol Parameter</h2>
+      <div class="control-group">
+        <label>Peluang lompatan jauh (Lévy): <strong id="levy-val">30%</strong></label>
+        <input type="range" min="0" max="100" value="30" id="levy-slider" class="slider" />
+        <span class="slider-labels"><span>0% — Tidak pernah</span><span>100% — Selalu</span></span>
+      </div>
+      <div class="control-group">
+        <label>Jumlah paus: <strong id="pop-val">12</strong></label>
+        <input type="range" min="4" max="30" value="12" id="pop-slider" class="slider" />
+      </div>
+      <div class="control-group">
+        <button class="btn-game" id="btn-run">▶ Jalankan Simulasi Tiruan</button>
+        <button class="btn-game btn-secondary" id="btn-stop">⏸ Pause</button>
+      </div>
     </section>
 
+    <!-- SECTION 7: Kuis -->
     <section id="quiz">
-      <h2>Kuis</h2>
-      <!-- TODO: pertanyaan interaktif -->
+      <h2>❓ Kuis</h2>
+      <p>Uji pemahamanmu tentang HLWOA!</p>
+      <button class="btn-game btn-accent" id="btn-quiz">🎯 Misi Kuis</button>
     </section>
   </main>
 
+  <!-- Modal Kuis -->
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal">
+      <h3>🎯 Kuis HLWOA</h3>
+      <p class="quiz-q">Apa tujuan utama Lévy Flight dalam HLWOA?</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">A. Mempercepat konvergensi saja</button>
+        <button class="quiz-opt" data-correct="true">B. Menghindari jebakan optimum lokal</button>
+        <button class="quiz-opt" data-correct="false">C. Mengurangi jumlah paus</button>
+        <button class="quiz-opt" data-correct="false">D. Memperbesar makespan</button>
+      </div>
+      <p class="quiz-feedback" id="quiz-fb"></p>
+      <button class="btn-game btn-secondary" id="quiz-close">Tutup</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="js/ui.js" type="module"></script>
 </body>
 </html>
