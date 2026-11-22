@@ -1,0 +1,26 @@
+{
+  "name": "soka-hybrid-simulator",
+  "version": "1.0.0",
+  "description": "Modul simulasi task scheduling heterogen (HLWOA, HC-CSO, TS, FPA, HEFT) untuk Tugas Demo 1 SOKA",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/test_tahap1.js && node tests/test_tahap2.js && node tests/test_tahap3.js && node tests/test_tahap4.js",
+    "test:tahap1": "node tests/test_tahap1.js",
+    "test:tahap2": "node tests/test_tahap2.js",
+    "test:tahap3": "node tests/test_tahap3.js",
+    "test:tahap4": "node tests/test_tahap4.js",
+    "export": "node simulator/exportResults.js",
+    "stats": "node simulator/statisticalReport.js"
+  },
+  "keywords": [
+    "task-scheduling",
+    "heft",
+    "hlwoa",
+    "hc-cso",
+    "tabu-search",
+    "fpa",
+    "cloudsim"
+  ],
+  "author": "Kelompok SOKA P1",
+  "license": "ISC"
+}

@@ -1,0 +1,179 @@
+/* ============================================================
+   KOMPONEN WEB TASK SCHEDULING (components.css)
+   Gantt Chart & Convergence Chart Responsif + Dark Mode
+   ============================================================ */
+
+:root {
+  --gantt-bg: #050d1a;
+  --gantt-panel: rgba(10, 25, 47, 0.92);
+  --gantt-card: rgba(16, 37, 66, 0.75);
+  --gantt-border: rgba(72, 202, 228, 0.25);
+  --gantt-text: #e6f1f8;
+  --gantt-text-muted: #8aaabe;
+  --gantt-primary: #0077b6;
+  --gantt-primary-light: #48cae4;
+  --gantt-accent: #06d6a0;
+  --gantt-warning: #ffd166;
+  --gantt-danger: #ef476f;
+  --gantt-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"], .theme-light {
+  --gantt-bg: #f4f8fb;
+  --gantt-panel: #ffffff;
+  --gantt-card: #eaf2f8;
+  --gantt-border: #bcd5e6;
+  --gantt-text: #0a2540;
+  --gantt-text-muted: #486581;
+}
+
+/* Komponen Gantt Wrapper */
+.soka-gantt-container {
+  width: 100%;
+  font-family: var(--gantt-font);
+  background: var(--gantt-panel);
+  border: 1px solid var(--gantt-border);
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  color: var(--gantt-text);
+  overflow-x: auto;
+  position: relative;
+}
+
+.soka-gantt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.soka-gantt-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gantt-primary-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.soka-gantt-stats {
+  font-size: 0.85rem;
+  color: var(--gantt-text-muted);
+}
+
+.soka-gantt-svg-wrapper {
+  width: 100%;
+  min-width: 600px;
+  overflow-x: auto;
+}
+
+/* Tooltip Mengapung */
+.soka-tooltip {
+  position: fixed;
+  background: rgba(5, 13, 26, 0.95);
+  border: 1px solid var(--gantt-primary-light);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.12s ease;
+  line-height: 1.4;
+  backdrop-filter: blur(4px);
+  display: none;
+}
+
+.soka-tooltip-title {
+  font-weight: 700;
+  color: var(--gantt-primary-light);
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(72, 202, 228, 0.3);
+  padding-bottom: 2px;
+}
+
+/* Komponen Convergence Chart Wrapper */
+.soka-conv-container {
+  width: 100%;
+  font-family: var(--gantt-font);
+  background: var(--gantt-panel);
+  border: 1px solid var(--gantt-border);
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  color: var(--gantt-text);
+  position: relative;
+}
+
+.soka-conv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.soka-conv-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gantt-primary-light);
+}
+
+.soka-conv-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.soka-btn-toggle {
+  background: var(--gantt-card);
+  border: 1px solid var(--gantt-border);
+  color: var(--gantt-text);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.soka-btn-toggle:hover, .soka-btn-toggle.active {
+  background: var(--gantt-primary);
+  border-color: var(--gantt-primary-light);
+  color: #ffffff;
+}
+
+.soka-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  justify-content: center;
+}
+
+.soka-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.soka-legend-item.hidden {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.soka-legend-color {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+}
