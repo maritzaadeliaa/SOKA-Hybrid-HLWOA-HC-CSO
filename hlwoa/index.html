@@ -3,131 +3,196 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HLWOA — HEFT + Whale Optimization + Lévy Flight</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <title>HLWOA — Satu Layar Terpadu (HEFT + WOA + Lévy)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <!-- Banner permanen -->
-  <div class="proto-banner">🚧 PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma</div>
+  <!-- HUD Atas -->
+  <header class="hud">
+    <div class="hud-left">
+      <a href="../index.html" class="btn-hud">← Beranda</a>
+      <span class="hud-logo">🐋 HLWOA</span>
+    </div>
 
-  <!-- HUD atas -->
-  <nav class="hud">
-    <a href="../index.html" class="hud-btn">← Kembali</a>
-    <span class="hud-title">🐋 HLWOA</span>
-    <span class="hud-stat">Makespan: <strong id="makespan-val">57.3</strong></span>
-    <div class="hud-progress"><div class="hud-progress-fill" id="progress-bar"></div></div>
-    <span class="hud-stat" id="iter-label">Iterasi: 0 / 50</span>
-  </nav>
+    <!-- Strip alur timeline kontinu -->
+    <div class="hud-flow">
+      <div class="flow-pill active" id="pill-heft" data-phase="heft">1. HEFT (Antrean Kasir)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-pill" id="pill-inject" data-phase="inject">2. Suntik Solusi</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-pill" id="pill-meta" data-phase="meta">3. Perbaikan WOA + Lévy</div>
+    </div>
 
-  <!-- Stepper level -->
-  <div class="stepper">
-    <div class="step locked" title="Segera hadir"><span class="lock">🔒</span> 1. Tutorial</div>
-    <div class="step locked" title="Segera hadir"><span class="lock">🔒</span> 2. Manual</div>
-    <div class="step active" data-target="heft-demo">3. Tebakan HEFT</div>
-    <div class="step active" data-target="meta-demo">4. Hewan Beraksi</div>
-    <div class="step locked" title="Segera hadir"><span class="lock">🔒</span> 5. Boss Battle</div>
-  </div>
+    <div class="hud-right">
+      <button class="btn-hud btn-icon" id="btn-info" title="Informasi Singkat">💡 Info</button>
+      <div class="hud-stat">
+        <span class="stat-label">Makespan:</span>
+        <strong class="stat-value" id="hud-makespan">72.0</strong>
+      </div>
+    </div>
+  </header>
 
-  <main>
-    <!-- SECTION 1: Intro -->
-    <section id="intro">
-      <h2>🐋 HLWOA = HEFT + WOA + Lévy Flight</h2>
-      <p><strong>Analogi Piring Kotor:</strong> Bayangkan ada tumpukan piring kotor (task)
-         yang harus dicuci oleh beberapa pencuci (VM) dengan kecepatan berbeda-beda.
-         <em>Makespan</em> adalah waktu orang <strong>terlama</strong> selesai mencuci.
-         Tujuan kita: membagi piring supaya semua selesai secepat mungkin!</p>
-      <p>HEFT memberi pembagian awal yang bagus, lalu paus-paus (WOA) berenang mencari
-         pembagian yang lebih baik. Lévy Flight memungkinkan paus melompat jauh agar tidak
-         terjebak di area yang sudah dijelajahi.</p>
-    </section>
+  <!-- Area Utama: Satu Layar Penuh (70% Canvas 3D + 30% Panel Kanan) -->
+  <main class="app-container">
+    <!-- Area Kiri: Canvas 3D & Mini-Gantt -->
+    <div class="viewport-3d" id="viewport-3d">
+      <!-- Container Canvas Three.js -->
+      <div id="meta-demo" class="canvas-mount"></div>
 
-    <!-- SECTION 2: Demo HEFT -->
-    <section id="heft-demo">
-      <h2>📦 Demo HEFT — Jadwal Awal</h2>
-      <p>Tekan tombol untuk memasukkan task terbesar ke VM yang selesai paling awal.</p>
-      <div class="heft-container">
-        <div class="task-queue" id="task-queue"></div>
-        <div class="vm-lanes" id="vm-lanes">
-          <div class="vm-lane"><span class="vm-label">VM 1</span><div class="lane-bar" data-vm="0"></div></div>
-          <div class="vm-lane"><span class="vm-label">VM 2</span><div class="lane-bar" data-vm="1"></div></div>
-          <div class="vm-lane"><span class="vm-label">VM 3</span><div class="lane-bar" data-vm="2"></div></div>
+      <!-- Tag zona & status di dalam canvas -->
+      <div class="scene-overlay-top">
+        <div class="zone-badge" id="heft-demo">
+          <span class="zone-icon">🛒</span>
+          <span class="zone-text" id="zone-status-text">Zona Depan: Antrean Troli ke Kasir (HEFT)</span>
+        </div>
+        <div class="trap-note" id="trap-indicator">
+          ⚠️ Kasir Magang (VM3) kosong selesai 33.3s, Senior (VM1) selesai 20.0s → Pilih Senior!
         </div>
       </div>
-      <button class="btn-game" id="heft-step-btn">▶ Langkah berikutnya</button>
-      <button class="btn-game btn-secondary" id="heft-reset-btn">↺ Reset</button>
-    </section>
 
-    <!-- SECTION 3: Demo Meta (3D) -->
-    <section id="meta-demo">
-      <h2>🌊 Demo WOA + Lévy Flight</h2>
-      <div id="three-container"></div>
-      <p class="meta-note">ℹ️ Ini metafora tiga dimensi; ruang pencarian asli berdimensi banyak.</p>
-      <div class="meta-buttons">
-        <button class="btn-game" id="btn-encircle">🔵 Mengepung</button>
-        <button class="btn-game" id="btn-spiral">🌀 Spiral Bubble-net</button>
-        <button class="btn-game" id="btn-levy">🚀 Lompat Jauh (Lévy)</button>
-      </div>
-    </section>
+      <!-- Mini-Gantt HTML Overlays (Dilekatkan melayang di atas hewan) -->
+      <div id="gantt" class="mini-gantt-layer"></div>
 
-    <!-- SECTION 4: Gantt -->
-    <section id="gantt">
-      <h2>📊 Gantt Chart</h2>
-      <div class="gantt-tabs">
-        <button class="gantt-tab active" data-tab="heft">Tebakan HEFT</button>
-        <button class="gantt-tab" data-tab="hybrid">Setelah Hybrid</button>
+      <!-- Mini-Gantt Hologram Terbang (Saat Fase Suntik) -->
+      <div id="flying-gantt" class="flying-gantt-badge">
+        <span class="fly-title">Solusi HEFT</span>
+        <div class="fly-bars">
+          <span class="fly-bar b1"></span>
+          <span class="fly-bar b2"></span>
+          <span class="fly-bar b3"></span>
+        </div>
+        <span class="fly-ms">72.0</span>
       </div>
-      <div class="gantt-chart" id="gantt-chart"></div>
-      <div class="gantt-legend" id="gantt-legend"></div>
-    </section>
 
-    <!-- SECTION 5: Konvergensi -->
-    <section id="convergence">
-      <h2>📈 Kurva Konvergensi</h2>
-      <div id="conv-chart"></div>
-    </section>
+      <!-- Catatan Metafora 3D -->
+      <div class="meta-footnote">
+        ℹ️ Metafora 3D; ruang pencarian task scheduling asli berdimensi banyak.
+      </div>
 
-    <!-- SECTION 6: Kontrol -->
-    <section id="controls">
-      <h2>🎮 Kontrol Parameter</h2>
-      <div class="control-group">
-        <label>Peluang lompatan jauh (Lévy): <strong id="levy-val">30%</strong></label>
-        <input type="range" min="0" max="100" value="30" id="levy-slider" class="slider" />
-        <span class="slider-labels"><span>0% — Tidak pernah</span><span>100% — Selalu</span></span>
+      <!-- Timeline Bar Bawah -->
+      <div class="timeline-bar">
+        <button class="btn-play" id="btn-play-pause">▶ Putar</button>
+        <button class="btn-tool" id="btn-restart" title="Ulang">↺ Ulang</button>
+        <div class="timeline-track-wrap">
+          <input type="range" min="0" max="1000" value="0" id="time-slider" class="timeline-slider" />
+          <div class="timeline-ticks">
+            <span style="left:0%">0s (HEFT)</span>
+            <span style="left:35%">Suntik</span>
+            <span style="left:55%">WOA</span>
+            <span style="left:100%">Optimum</span>
+          </div>
+        </div>
+        <span class="timeline-time" id="timeline-time-label">0.0s</span>
       </div>
-      <div class="control-group">
-        <label>Jumlah paus: <strong id="pop-val">12</strong></label>
-        <input type="range" min="4" max="30" value="12" id="pop-slider" class="slider" />
-      </div>
-      <div class="control-group">
-        <button class="btn-game" id="btn-run">▶ Jalankan Simulasi Tiruan</button>
-        <button class="btn-game btn-secondary" id="btn-stop">⏸ Pause</button>
-      </div>
-    </section>
+    </div>
 
-    <!-- SECTION 7: Kuis -->
-    <section id="quiz">
-      <h2>❓ Kuis</h2>
-      <p>Uji pemahamanmu tentang HLWOA!</p>
-      <button class="btn-game btn-accent" id="btn-quiz">🎯 Misi Kuis</button>
-    </section>
+    <!-- Area Kanan: Panel Samping (Grafik, Kontrol, Bukti Dampak) -->
+    <aside class="sidebar-panel">
+      <!-- Panel Grafik Konvergensi Langsung -->
+      <div class="panel-card" id="convergence">
+        <div class="card-head">
+          <h3>📈 Grafik Konvergensi Langsung</h3>
+          <span class="badge-live">LIVE</span>
+        </div>
+        <div class="chart-box" id="conv-chart-svg"></div>
+        <div class="chart-legend">
+          <div class="leg-item"><span class="leg-color leg-hybrid"></span> Hybrid HLWOA</div>
+          <div class="leg-item"><span class="leg-color leg-meta"></span> WOA Saja</div>
+          <div class="leg-item"><span class="leg-color leg-heft"></span> HEFT Saja (72.0)</div>
+        </div>
+      </div>
+
+      <!-- Panel Kontrol Parameter & Mode -->
+      <div class="panel-card" id="controls">
+        <div class="card-head">
+          <h3>🎮 Kontrol Interaktif</h3>
+        </div>
+
+        <div class="control-row">
+          <label>Mulai Populasi Dari:</label>
+          <div class="toggle-group">
+            <button class="btn-toggle active" id="toggle-mode-heft">⭐ HEFT (Hybrid)</button>
+            <button class="btn-toggle" id="toggle-mode-random">🎲 Acak (Meta Saja)</button>
+          </div>
+        </div>
+
+        <div class="control-row highlight-row">
+          <div class="row-label-group">
+            <label>Lévy Flight (Lompatan Jauh):</label>
+            <span class="badge-feature">Khas HLWOA</span>
+          </div>
+          <div class="switch-wrap">
+            <input type="checkbox" id="toggle-levy" checked />
+            <label for="toggle-levy" class="switch-slider"></label>
+            <span id="levy-status-label" class="switch-text">ON</span>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <label>Kecepatan Simulasi:</label>
+          <div class="speed-buttons">
+            <button class="btn-speed active" data-spd="1">1x</button>
+            <button class="btn-speed" data-spd="2">2x</button>
+            <button class="btn-speed" data-spd="4">4x</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kartu Bukti Dampak -->
+      <div class="panel-card impact-card">
+        <div class="card-head">
+          <h3>🏆 Bukti Dampak Makespan</h3>
+        </div>
+        <div class="impact-grid">
+          <div class="impact-col">
+            <span class="imp-title">HEFT Saja</span>
+            <span class="imp-val" id="val-heft-only">72.0</span>
+            <span class="imp-note">Jadwal awal greedy</span>
+          </div>
+          <div class="impact-col">
+            <span class="imp-title">WOA Saja</span>
+            <span class="imp-val" id="val-woa-only">63.4</span>
+            <span class="imp-note">Populasi acak</span>
+          </div>
+          <div class="impact-col best-col">
+            <span class="imp-title">Hybrid HLWOA</span>
+            <span class="imp-val highlight" id="val-hybrid">52.8</span>
+            <span class="imp-badge">-26.7% vs HEFT</span>
+          </div>
+        </div>
+      </div>
+    </aside>
   </main>
 
-  <!-- Modal Kuis -->
-  <div class="modal-overlay" id="quiz-modal">
-    <div class="modal">
-      <h3>🎯 Kuis HLWOA</h3>
-      <p class="quiz-q">Apa tujuan utama Lévy Flight dalam HLWOA?</p>
-      <div class="quiz-options">
-        <button class="quiz-opt" data-correct="false">A. Mempercepat konvergensi saja</button>
-        <button class="quiz-opt" data-correct="true">B. Menghindari jebakan optimum lokal</button>
-        <button class="quiz-opt" data-correct="false">C. Mengurangi jumlah paus</button>
-        <button class="quiz-opt" data-correct="false">D. Memperbesar makespan</button>
+  <!-- Overlay Intro Singkat (Bisa Ditutup) -->
+  <div class="intro-overlay" id="intro">
+    <div class="intro-box">
+      <div class="intro-header">
+        <h2>🐋 HLWOA = HEFT + WOA + Lévy Flight</h2>
+        <button class="btn-close-intro" id="btn-close-intro">✕</button>
       </div>
-      <p class="quiz-feedback" id="quiz-fb"></p>
-      <button class="btn-game btn-secondary" id="quiz-close">Tutup</button>
+      <p>
+        <strong>Analogi Antrean Kasir:</strong> Task adalah troli belanjaan dengan ukuran berbeda,
+        dan VM adalah 3 kasir (Senior, Reguler, Magang). HEFT menyusun antrean awal secara cepat
+        (mengutamakan waktu selesai tercepat, bukan kasir yang sekadar kosong).
+      </p>
+      <p>
+        Solusi HEFT lalu <strong>disuntikkan</strong> ke salah satu paus di kawanan (WOA).
+        Paus mengepung dan membuat spiral gelembung, dibantu <strong>Lévy Flight</strong> untuk
+        melompat keluar dari jebakan lokal hingga menemukan makespan terendah.
+      </p>
+      <button class="btn-play btn-modal-start" id="btn-start-intro">Mulai Eksplorasi 🚀</button>
     </div>
   </div>
+
+  <!-- Container Quiz Dummy untuk Memenuhi ID Tanpa Menampilkan Kuis -->
+  <div id="quiz" style="display:none;" aria-hidden="true"></div>
+
+  <!-- Banner Permanen Prototipe -->
+  <footer class="proto-banner">
+    🚧 PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
+  </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="js/ui.js" type="module"></script>
