@@ -1,1 +1,3 @@
-# SOKA-Hybrid-HLWOA-HC-CSO
+# SOKA — Hybrid Task Scheduling
+
+> TODO: tempel overview
