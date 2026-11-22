@@ -1,750 +1,1163 @@
 /**
- * @module ui — HC-CSO (Kucing) — Satu Layar Terpadu
- * @description Prototipe tampilan 3D satu layar: Antrean Kasir HEFT (zona depan)
- *              menyatu dengan Ruangan Kucing CSO (zona belakang).
- *              Semua data dan pergerakan adalah DATA TIRUAN.
+ * @module ui
+ * @description Pengendali Antarmuka Web Interaktif untuk Modul Pembelajaran & Eksperimen HC-CSO (Peran P3).
+ *
+ * Fitur Utama:
+ *   1. Hidrasi angka riil pada kartu "Bukti Dampak Makespan" & pembaruan status prototipe.
+ *   2. Pemilih skenario dataset asli (GoCJ 32 Preview, GoCJ 100, GoCJ 500).
+ *   3. Visualisasi Gantt Chart interaktif (HC-CSO vs HEFT + deteksi VM bottleneck + tooltip).
+ *   4. Visualisasi Kurva Konvergensi 4 varian (HEFT, CSO, HC-CSO-no-IW, HC-CSO).
+ *   5. Sandbox eksperimen parameter (Mixing Ratio, SMP, Inertia Weight SMIW) langsung di browser.
+ *   6. Ilustrasi animasi perilaku kucing (Seeking Mode & Tracing Mode).
+ *   7. Tabel ringkasan eksperimen Ablation dari `results/ablation_hccso.json`.
+ *   8. Kuis konseptual interaktif 3 pertanyaan beserta pembahasan.
+ *
+ * Catatan Batas Modul:
+ * - Tidak mengimpor berkas apa pun dari folder `hlwoa/`.
  */
 
-/* ============================================================
-   DATA TIRUAN — TODO: ganti dengan data dari simulator
-   ============================================================ */
+import { DEMO_DATA as IMPORTED_DEMO_DATA } from "./demo-data.js";
+import { QUIZ_DATA as IMPORTED_QUIZ_DATA } from "./quiz-data.js";
 
-// 8 Troli Task (T1 s/d T8) diurutkan dari cost terbesar
-const HEFT_TASKS = [
-  { id: 'T1', cost: 20, color: '#e76f51', w: 1.2 }, // TODO: ganti dengan data dari simulator
-  { id: 'T2', cost: 16, color: '#f4a261', w: 1.0 }, // TODO: ganti dengan data dari simulator
-  { id: 'T3', cost: 14, color: '#e9c46a', w: 0.9 }, // TODO: ganti dengan data dari simulator
-  { id: 'T4', cost: 12, color: '#2a9d8f', w: 0.8 }, // TODO: ganti dengan data dari simulator
-  { id: 'T5', cost: 10, color: '#264653', w: 0.7 }, // TODO: ganti dengan data dari simulator
-  { id: 'T6', cost: 8,  color: '#d4a373', w: 0.6 }, // TODO: ganti dengan data dari simulator
-  { id: 'T7', cost: 6,  color: '#bc6c25', w: 0.5 }, // TODO: ganti dengan data dari simulator
-  { id: 'T8', cost: 4,  color: '#606c38', w: 0.4 }, // TODO: ganti dengan data dari simulator
-];
+const DEMO_DATA =
+  IMPORTED_DEMO_DATA ||
+  (typeof window !== "undefined" ? window.DEMO_DATA : null);
+const QUIZ_DATA =
+  IMPORTED_QUIZ_DATA ||
+  (typeof window !== "undefined" ? window.QUIZ_DATA : null);
 
-// 3 Kasir / VM heterogen
-const CASHIERS = [
-  { id: 'VM1', name: 'Kasir Senior', speed: 1.0, color: '#e76f51', x: -3.5 }, // TODO: ganti dengan data dari simulator
-  { id: 'VM2', name: 'Kasir Reguler', speed: 0.7, color: '#f4a261', x: 0 },    // TODO: ganti dengan data dari simulator
-  { id: 'VM3', name: 'Kasir Magang', speed: 0.35, color: '#e9c46a', x: 3.5 }, // TODO: ganti dengan data dari simulator
-];
-
-// Keputusan penempatan HEFT terurut [taskIdx, cashierIdx, finishTime]
-const HEFT_DECISIONS = [
-  { taskIdx: 0, vm: 0, eft: 20.0 }, // T1 -> VM1 (0+20/1.0 = 20)
-  { taskIdx: 1, vm: 1, eft: 22.8 }, // T2 -> VM2 (0+16/0.7 = 22.8)
-  { taskIdx: 2, vm: 0, eft: 34.0 }, // T3 -> VM1 (20+14/1.0 = 34.0)
-  { taskIdx: 3, vm: 1, eft: 40.0 }, // T4 -> VM2 jebakan Magang (22.8+12/0.7=40 < 0+12/0.35=34.3 tapi VM2 menang di step berikutnya)
-  { taskIdx: 4, vm: 2, eft: 28.5 }, // T5 -> VM3 (0+10/0.35 = 28.5)
-  { taskIdx: 5, vm: 0, eft: 42.0 }, // T6 -> VM1
-  { taskIdx: 6, vm: 2, eft: 45.7 }, // T7 -> VM3
-  { taskIdx: 7, vm: 1, eft: 45.7 }, // T8 -> VM2
-];
-
-// Nilai makespan target
-const MAKESPAN_HEFT = 72.0;    // TODO: ganti dengan data dari simulator
-const MAKESPAN_HYBRID = 54.2;  // TODO: ganti dengan data dari simulator
-const MAKESPAN_META_ONLY = 64.1; // TODO: ganti dengan data dari simulator
-
-// Titik kurva konvergensi (50 iterasi)
-const CONV_CURVES = {
-  heft: Array(51).fill(MAKESPAN_HEFT), // TODO: ganti dengan data dari simulator
-  hybrid: [],                          // TODO: ganti dengan data dari simulator
-  metaOnly: []                         // TODO: ganti dengan data dari simulator
+// Modul simulator opsional untuk simulasi live pada slider parameter
+let liveSimModules = {
+  loaded: false,
+  runHCCSO: null,
+  heft: null,
+  fitness: null,
 };
 
-// Bangun kurva konvergensi tiruan
-{
-  let h = MAKESPAN_HEFT;
-  let m = 105.0;
-  for (let i = 0; i <= 50; i++) {
-    CONV_CURVES.hybrid.push(Math.round(h * 10) / 10);
-    CONV_CURVES.metaOnly.push(Math.round(m * 10) / 10);
-    h -= (h - MAKESPAN_HYBRID) * 0.10 + Math.sin(i * 0.65) * 0.35;
-    if (h < MAKESPAN_HYBRID) h = MAKESPAN_HYBRID;
-    m -= (m - MAKESPAN_META_ONLY) * 0.08 + Math.cos(i * 0.55) * 0.4;
-    if (m < MAKESPAN_META_ONLY) m = MAKESPAN_META_ONLY;
-  }
-}
-
-/* ============================================================
-   STATUS STATE & CONTROLS
-   ============================================================ */
-let timelineTime = 0.0; // 0.0 s/d 1.0 (0s s/d 12s)
-let isPlaying = true;
-let speedMultiplier = 1.0;
-let isHeftSeedMode = true; // true = Hybrid (seed HEFT), false = Acak (Meta saja)
-let inertiaWeight = 0.50;  // 0.0 s/d 1.0 (Khas HC-CSO)
-
-const TOTAL_DURATION_SEC = 12.0;
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-
-/* ============================================================
-   THREE.JS: SCENE MENYATU (KASIR DEPAN + RUANGAN KUCING BELAKANG)
-   ============================================================ */
-let scene, camera, renderer, clock;
-let cashierMeshes = [], trolleyMeshes = [];
-let cats = [], yarnBallTargetMesh, ghostMeshes = [];
-
-function initThree() {
-  const mount = $('#meta-demo');
-  if (!mount || typeof THREE === 'undefined') return;
-
-  scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x140804, 0.026);
-
-  camera = new THREE.PerspectiveCamera(48, mount.clientWidth / mount.clientHeight, 0.1, 150);
-  camera.position.set(0, 11, 20);
-  camera.lookAt(0, 1, -2);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(mount.clientWidth, mount.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  mount.appendChild(renderer.domElement);
-
-  // Pencahayaan hangat
-  scene.add(new THREE.AmbientLight(0x775544, 0.7));
-  const warmSun = new THREE.DirectionalLight(0xffddaa, 0.95);
-  warmSun.position.set(10, 20, 15);
-  scene.add(warmSun);
-  const backLight = new THREE.DirectionalLight(0xe76f51, 0.5);
-  backLight.position.set(-10, 10, -15);
-  scene.add(backLight);
-
-  // --- ZONA DEPAN: ANTREAN KASIR (Z = 2 s/d 8) ---
-  buildCashierZone();
-
-  // --- ZONA BELAKANG: RUANGAN KUCING & BOLA BENANG (Z = -4 s/d -24) ---
-  buildCatRoomZone();
-
-  // Resize listener
-  window.addEventListener('resize', onWindowResize);
-
-  clock = new THREE.Clock();
-  animateScene();
-}
-
-function onWindowResize() {
-  const mount = $('#meta-demo');
-  if (!mount || !camera || !renderer) return;
-  camera.aspect = mount.clientWidth / mount.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(mount.clientWidth, mount.clientHeight);
-}
-
-/* ==================== ZONA DEPAN: KASIR & TROLI ==================== */
-function buildCashierZone() {
-  // Lantai kasir (platform kayu gelap)
-  const floorGeo = new THREE.BoxGeometry(14, 0.3, 8);
-  const floorMat = new THREE.MeshPhongMaterial({ color: 0x2b150c, flatShading: true });
-  const cashierPlatform = new THREE.Mesh(floorGeo, floorMat);
-  cashierPlatform.position.set(0, -0.15, 5);
-  scene.add(cashierPlatform);
-
-  // 3 Meja Kasir
-  CASHIERS.forEach((c) => {
-    const group = new THREE.Group();
-    // Meja kasir
-    const deskGeo = new THREE.BoxGeometry(2.2, 1.0, 1.4);
-    const deskMat = new THREE.MeshPhongMaterial({ color: 0x8a381f, flatShading: true });
-    const desk = new THREE.Mesh(deskGeo, deskMat);
-    desk.position.set(0, 0.5, 0);
-    group.add(desk);
-
-    // Kasir (figur sederhana)
-    const cashierHead = new THREE.Mesh(
-      new THREE.SphereGeometry(0.25, 8, 8),
-      new THREE.MeshPhongMaterial({ color: 0xf4a261 })
-    );
-    cashierHead.position.set(0, 1.3, -0.4);
-    group.add(cashierHead);
-
-    // Komputer kasir
-    const monitor = new THREE.Mesh(
-      new THREE.BoxGeometry(0.5, 0.35, 0.1),
-      new THREE.MeshBasicMaterial({ color: 0xe9c46a })
-    );
-    monitor.position.set(0, 1.1, 0.3);
-    group.add(monitor);
-
-    group.position.set(c.x, 0, 3.5);
-    scene.add(group);
-    cashierMeshes.push(group);
-  });
-
-  // 8 Troli Task
-  HEFT_TASKS.forEach((t, i) => {
-    const trolley = new THREE.Group();
-    const boxGeo = new THREE.BoxGeometry(t.w, 0.5, 0.7);
-    const boxMat = new THREE.MeshPhongMaterial({ color: t.color, flatShading: true });
-    const basket = new THREE.Mesh(boxGeo, boxMat);
-    basket.position.set(0, 0.35, 0);
-    trolley.add(basket);
-
-    const wheelGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.08, 6);
-    const wheelMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
-    [[-0.35, 0.1, 0.3], [0.35, 0.1, 0.3], [-0.35, 0.1, -0.3], [0.35, 0.1, -0.3]].forEach(([wx, wy, wz]) => {
-      const wheel = new THREE.Mesh(wheelGeo, wheelMat);
-      wheel.rotation.x = Math.PI / 2;
-      wheel.position.set(wx, wy, wz);
-      trolley.add(wheel);
-    });
-
-    const startX = -4.5 + i * 1.3;
-    trolley.position.set(startX, 0, 7.8);
-    trolley.userData = {
-      initialPos: new THREE.Vector3(startX, 0, 7.8),
-      taskIndex: i,
+async function loadSimulatorModules() {
+  if (liveSimModules.loaded) return liveSimModules;
+  try {
+    const [hccsoMod, heftMod, fitMod] = await Promise.all([
+      import("../../simulator/algorithms/hccso.js"),
+      import("../../simulator/heft.js"),
+      import("../../simulator/fitness.js"),
+    ]);
+    liveSimModules = {
+      loaded: true,
+      runHCCSO: hccsoMod.runHCCSO,
+      heft: heftMod.heft,
+      fitness: fitMod.fitness,
     };
+  } catch (err) {
+    console.info(
+      "[HC-CSO UI] Mode data precomputed aktif (simulator live tidak dimuat):",
+      err.message,
+    );
+  }
+  return liveSimModules;
+}
 
-    scene.add(trolley);
-    trolleyMeshes.push(trolley);
+// ============================================================================
+// 1. STATE APLIKASI & HELPER DOM
+// ============================================================================
+
+const appState = {
+  selectedScenarioKey: null,
+  ganttAlgorithm: "hccso", // 'hccso' | 'heft'
+  liveOverride: null, // Menyimpan hasil run ulang dari slider interaktif
+  quizAnswers: {}, // { [questionId]: optionIndex }
+  quizSubmitted: false,
+  swarmAnimFrameId: null,
+};
+
+function qs(selector, root = document) {
+  return root.querySelector(selector);
+}
+
+function qsa(selector, root = document) {
+  return Array.from(root.querySelectorAll(selector));
+}
+
+function setText(selector, value) {
+  qsa(selector).forEach((el) => {
+    el.textContent = value;
   });
 }
 
-/* ==================== ZONA BELAKANG: RUANGAN KUCING ==================== */
-function buildCatRoomZone() {
-  // Lantai ruangan bergelombang (lembah di tengah belakang)
-  const floorGeo = new THREE.PlaneGeometry(45, 30, 40, 30);
-  const pos = floorGeo.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i), y = pos.getY(i);
-    const distValley = Math.hypot(x - (-2.5), y - (-4));
-    const valleyDepth = Math.max(0, 3.8 - distValley * 0.38);
-    pos.setZ(i, Math.sin(x * 0.35) * Math.cos(y * 0.35) * 1.2 - valleyDepth);
+function fmt(num, digits = 2) {
+  if (num === null || num === undefined || Number.isNaN(Number(num)))
+    return "-";
+  return Number(num).toFixed(digits);
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// ============================================================================
+// 2. HIDRASI KARTU DAMPAK MAKESPAN & BANNER DATA ASLI
+// ============================================================================
+
+function hydrateImpactCardAndBanner() {
+  if (!DEMO_DATA) return;
+
+  const impact = DEMO_DATA.impactCard;
+  if (impact) {
+    // Mendukung ID eksplisit maupun atribut data-impact pada hc-cso/index.html
+    setText(
+      '#impact-heft, [data-impact="heft"]',
+      `${fmt(impact.heftMakespan, 2)} s`,
+    );
+    setText(
+      '#impact-cso, [data-impact="cso"]',
+      `${fmt(impact.csoMakespan, 2)} s`,
+    );
+    setText(
+      '#impact-hccso-no-iw, [data-impact="hccso-no-iw"]',
+      `${fmt(impact.hccsoNoIwMakespan, 2)} s`,
+    );
+    setText(
+      '#impact-hccso, [data-impact="hccso"]',
+      `${fmt(impact.hccsoMakespan, 2)} s`,
+    );
+
+    const redHeft = Number(impact.reductionVsHeftPct || 0);
+    const signHeft = redHeft >= 0 ? "-" : "+";
+    setText(
+      '#impact-reduction-heft, [data-impact="reduction-heft"]',
+      `${signHeft}${fmt(Math.abs(redHeft), 2)}% vs HEFT`,
+    );
+
+    const redCso = Number(impact.reductionVsCsoPct || 0);
+    const signCso = redCso >= 0 ? "-" : "+";
+    setText(
+      '#impact-reduction-cso, [data-impact="reduction-cso"]',
+      `${signCso}${fmt(Math.abs(redCso), 2)}% vs CSO`,
+    );
+
+    setText(
+      '#impact-source, [data-impact="source"]',
+      `Sumber data terverifikasi: ${impact.source}`,
+    );
   }
-  pos.needsUpdate = true;
-  floorGeo.computeVertexNormals();
 
-  const floor = new THREE.Mesh(floorGeo, new THREE.MeshPhongMaterial({
-    color: 0x4a2411, flatShading: true, side: THREE.DoubleSide
-  }));
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, -2.5, -12);
-  scene.add(floor);
+  // Ganti banner prototipe tiruan dengan informasi data asli & catatan ilustrasi visual
+  const bannerSelectors = [
+    "#prototype-banner",
+    ".prototype-warning",
+    '[data-role="prototype-footer"]',
+  ];
+  for (const sel of bannerSelectors) {
+    const bannerEl = qs(sel);
+    if (bannerEl) {
+      bannerEl.classList.remove("is-prototype-dummy");
+      bannerEl.classList.add("is-verified-data");
+      bannerEl.innerHTML = `
+        <strong>DATA EKSPERIMEN TERVERIFIKASI:</strong> Menampilkan hasil aktual simulator HC-CSO pada dataset GoCJ &amp; hasil <em>ablation study</em>.
+        <span class="illustration-note">Catatan: Animasi pergerakan kucing pada halaman ini merupakan ilustrasi visual mekanisme <em>Seeking Mode</em> dan <em>Tracing Mode</em>.</span>
+      `;
+    }
+  }
 
-  // Bola Benang Target Terbaik (Lembah Terdalam)
-  yarnBallTargetMesh = new THREE.Group();
-  const ballCore = new THREE.Mesh(
-    new THREE.SphereGeometry(0.55, 12, 12),
-    new THREE.MeshPhongMaterial({ color: 0xe9c46a, emissive: 0xf4a261, emissiveIntensity: 0.85 })
+  // Pastikan catatan ilustrasi animasi kucing juga muncul pada wadah animasi jika tersedia
+  const animNoteEl = qs(
+    '#cat-illustration-note, [data-role="cat-illustration-note"]',
   );
-  yarnBallTargetMesh.add(ballCore);
-  for (let k = 0; k < 3; k++) {
-    const thread = new THREE.Mesh(
-      new THREE.TorusGeometry(0.58, 0.04, 6, 12),
-      new THREE.MeshPhongMaterial({ color: 0xe76f51 })
-    );
-    thread.rotation.set(k * 0.8, k * 1.1, 0);
-    yarnBallTargetMesh.add(thread);
+  if (animNoteEl) {
+    animNoteEl.textContent =
+      "Catatan: Animasi swarm kucing di atas adalah ilustrasi visual konseptual dari Seeking Mode (eksplorasi lokal) dan Tracing Mode (pergerakan kecepatan SMIW).";
   }
-  yarnBallTargetMesh.position.set(-2.5, -1.0, -14);
-  scene.add(yarnBallTargetMesh);
+}
 
-  // 12 Kucing Low-Poly
-  cats = [];
-  for (let i = 0; i < 12; i++) {
-    const isHeftSeed = (i === 0);
-    const cat = createCatMesh(isHeftSeed);
+// ============================================================================
+// 3. PEMILIH SKENARIO & RINGKASAN METRIK AKTIF
+// ============================================================================
 
-    const angle = (i / 12) * Math.PI * 2;
-    const r = 5.5 + (i % 3) * 1.5;
-    const cx = yarnBallTargetMesh.position.x + Math.cos(angle) * r;
-    const cz = yarnBallTargetMesh.position.z + Math.sin(angle) * r;
-    const cy = -0.5;
+function getActiveScenario() {
+  if (appState.liveOverride) return appState.liveOverride;
+  if (!DEMO_DATA || !DEMO_DATA.scenarios) return null;
+  const keys = Object.keys(DEMO_DATA.scenarios);
+  if (keys.length === 0) return null;
 
-    cat.position.set(cx, cy, cz);
-    cat.lookAt(yarnBallTargetMesh.position.x, cy, yarnBallTargetMesh.position.z);
+  const activeKey =
+    appState.selectedScenarioKey &&
+    DEMO_DATA.scenarios[appState.selectedScenarioKey]
+      ? appState.selectedScenarioKey
+      : keys[0];
 
-    cat.userData = {
-      index: i,
-      isHeft: isHeftSeed,
-      basePos: new THREE.Vector3(cx, cy, cz),
-      angle: angle,
-      radius: r,
-      bobOffset: Math.random() * Math.PI * 2,
-      mode: i % 2 === 0 ? 'seeking' : 'tracing', // CSO mode
-      seekStepTimer: 0,
+  appState.selectedScenarioKey = activeKey;
+  return DEMO_DATA.scenarios[activeKey];
+}
+
+function initScenarioControls() {
+  const selectEl = qs("#scenario-select");
+  if (!selectEl || !DEMO_DATA?.scenarios) return;
+
+  const scenarios = Object.values(DEMO_DATA.scenarios);
+  selectEl.innerHTML = scenarios
+    .map(
+      (sc) =>
+        `<option value="${escapeHtml(sc.key)}">${escapeHtml(sc.title)} (${sc.taskCount} tasks, ${sc.vmCount} VMs)</option>`,
+    )
+    .join("");
+
+  if (scenarios.length > 0) {
+    appState.selectedScenarioKey = scenarios[0].key;
+    selectEl.value = appState.selectedScenarioKey;
+  }
+
+  selectEl.addEventListener("change", (e) => {
+    appState.selectedScenarioKey = e.target.value;
+    appState.liveOverride = null; // Reset override saat ganti dataset
+    renderAllVisualizations();
+  });
+}
+
+function renderScenarioMetrics() {
+  const scenario = getActiveScenario();
+  if (!scenario) return;
+
+  const m = scenario.metrics;
+  setText("#metric-heft-makespan", `${fmt(m.heftMakespan, 2)} s`);
+  setText("#metric-cso-makespan", `${fmt(m.csoMakespan, 2)} s`);
+  setText("#metric-noiw-makespan", `${fmt(m.hccsoNoIwMakespan, 2)} s`);
+  setText("#metric-hccso-makespan", `${fmt(m.hccsoMakespan, 2)} s`);
+
+  const redHeft = Number(m.reductionVsHeftPct || 0);
+  setText(
+    "#metric-reduction-heft",
+    `${redHeft >= 0 ? "-" : "+"}${fmt(Math.abs(redHeft), 2)}% vs HEFT`,
+  );
+  setText("#metric-evals", `${m.evaluations ?? "-"} evals`);
+  setText("#metric-time-ms", `${fmt(m.timeMs, 2)} ms`);
+
+  // Detail metrik jadwal aktif (Gantt terpilih: HC-CSO atau HEFT)
+  const ganttData = scenario.gantt?.[appState.ganttAlgorithm];
+  if (ganttData) {
+    setText("#gantt-stat-makespan", `${fmt(ganttData.makespan, 2)} s`);
+    setText("#gantt-stat-utilization", `${fmt(ganttData.utilization, 2)}%`);
+    setText("#gantt-stat-imbalance", fmt(ganttData.imbalance, 4));
+    setText("#gantt-stat-cost", `G$ ${fmt(ganttData.cost, 2)}`);
+  }
+}
+
+// ============================================================================
+// 4. VISUALISASI GANTT CHART (KOMPATIBEL KOMPONEN P1 + CANVAS MANDIRI)
+// ============================================================================
+
+const TIER_COLORS = {
+  Compute: ["#2563eb", "#3b82f6", "#1d4ed8"],
+  Standard: ["#0d9488", "#14b8a6", "#0f766e"],
+  Light: ["#d97706", "#f59e0b", "#b45309"],
+};
+
+function initGanttToggleControls() {
+  const toggleButtons = qsa("[data-gantt-algo]");
+  toggleButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const algo = btn.getAttribute("data-gantt-algo");
+      if (algo !== "hccso" && algo !== "heft") return;
+
+      appState.ganttAlgorithm = algo;
+      toggleButtons.forEach((b) =>
+        b.classList.toggle(
+          "active",
+          b.getAttribute("data-gantt-algo") === algo,
+        ),
+      );
+      renderScenarioMetrics();
+      renderGanttSection();
+    });
+  });
+}
+
+function renderGanttSection() {
+  const scenario = getActiveScenario();
+  if (!scenario || !scenario.gantt) return;
+
+  const ganttData = scenario.gantt[appState.ganttAlgorithm];
+  if (!ganttData) return;
+
+  // Delegasi jika komponen eksternal P1 (window.GanttChart) terpasang
+  const externalContainer = qs("#gantt-chart-container");
+  if (
+    typeof window !== "undefined" &&
+    window.GanttChart?.render &&
+    externalContainer
+  ) {
+    window.GanttChart.render(externalContainer, {
+      algorithm: appState.ganttAlgorithm.toUpperCase(),
+      vms: ganttData.vmSummaries,
+      blocks: ganttData.blocks,
+      makespan: ganttData.makespan,
+    });
+  }
+
+  // Render Canvas HTML5 interaktif pada #gantt-canvas
+  const canvas = qs("#gantt-canvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const logicalWidth = canvas.clientWidth || 860;
+  const rowHeight = 26;
+  const padTop = 36;
+  const padBottom = 34;
+  const padLeft = 148;
+  const padRight = 28;
+  const vmCount = ganttData.vmSummaries.length;
+  const logicalHeight = padTop + vmCount * rowHeight + padBottom;
+
+  canvas.width = logicalWidth * dpr;
+  canvas.height = logicalHeight * dpr;
+  canvas.style.height = `${logicalHeight}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  ctx.clearRect(0, 0, logicalWidth, logicalHeight);
+
+  const plotWidth = Math.max(120, logicalWidth - padLeft - padRight);
+  const maxTime = Math.max(ganttData.makespan, 0.001) * 1.05;
+
+  // Header & Legenda Tier
+  ctx.fillStyle = "#0f172a";
+  ctx.font = "bold 12px system-ui, sans-serif";
+  ctx.textAlign = "left";
+  const titleAlgo =
+    appState.ganttAlgorithm === "hccso"
+      ? "HC-CSO (Hybrid HEFT + SMIW)"
+      : "HEFT (Baseline)";
+  ctx.fillText(`Gantt Chart Alokasi Task — ${titleAlgo}`, padLeft, 20);
+
+  // Grid vertikal sumbu waktu
+  const ticks = 6;
+  for (let i = 0; i <= ticks; i++) {
+    const tVal = (maxTime / ticks) * i;
+    const x = padLeft + (tVal / maxTime) * plotWidth;
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.lineWidth = 1;
+    ctx.moveTo(x, padTop - 6);
+    ctx.lineTo(x, padTop + vmCount * rowHeight);
+    ctx.stroke();
+
+    ctx.fillStyle = "#64748b";
+    ctx.font = "10px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`${tVal.toFixed(1)}s`, x, padTop + vmCount * rowHeight + 16);
+  }
+
+  // Gambar baris tiap VM
+  ganttData.vmSummaries.forEach((vm, idx) => {
+    const y = padTop + idx * rowHeight;
+
+    // Latar baris bergantian & sorotan VM bottleneck
+    if (vm.isBottleneck) {
+      ctx.fillStyle = "rgba(239, 68, 68, 0.10)";
+    } else {
+      ctx.fillStyle = idx % 2 === 0 ? "#f8fafc" : "#ffffff";
+    }
+    ctx.fillRect(padLeft, y + 1, plotWidth, rowHeight - 2);
+
+    // Label VM di sisi kiri
+    ctx.fillStyle = vm.isBottleneck ? "#b91c1c" : "#1e293b";
+    ctx.font = vm.isBottleneck
+      ? "bold 11px system-ui, sans-serif"
+      : "11px system-ui, sans-serif";
+    ctx.textAlign = "right";
+    const badge = vm.isBottleneck ? " [MAX]" : "";
+    ctx.fillText(`VM-${vm.vmId} (${vm.tier[0]})${badge}`, padLeft - 10, y + 17);
+  });
+
+  // Simpan bounding box tiap blok untuk interaksi hover tooltip
+  const renderedRects = [];
+
+  ganttData.blocks.forEach((blk, idx) => {
+    const x = padLeft + (blk.start / maxTime) * plotWidth;
+    const w = Math.max(
+      1.5,
+      ((blk.end - blk.start) / maxTime) * plotWidth - 0.8,
+    );
+    const y = padTop + blk.vmId * rowHeight + 4;
+    const h = rowHeight - 8;
+
+    const palette = TIER_COLORS[blk.vmTier] || TIER_COLORS.Standard;
+    ctx.fillStyle = palette[idx % palette.length];
+    ctx.fillRect(x, y, w, h);
+
+    if (w >= 26) {
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "9px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(blk.label, x + w / 2, y + h / 2 + 3);
+    }
+
+    renderedRects.push({ x, y, w, h, block: blk });
+  });
+
+  // Garis vertikal Makespan (C_max)
+  const xMakespan = padLeft + (ganttData.makespan / maxTime) * plotWidth;
+  ctx.save();
+  ctx.beginPath();
+  ctx.setLineDash([5, 4]);
+  ctx.strokeStyle = "#dc2626";
+  ctx.lineWidth = 1.8;
+  ctx.moveTo(xMakespan, padTop - 8);
+  ctx.lineTo(xMakespan, padTop + vmCount * rowHeight + 4);
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.fillStyle = "#dc2626";
+  ctx.font = "bold 10px system-ui, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(
+    `C_max = ${ganttData.makespan.toFixed(2)}s`,
+    Math.min(xMakespan + 4, logicalWidth - 95),
+    padTop - 10,
+  );
+
+  // Pasang interaksi hover tooltip pada canvas
+  const tooltipEl = qs("#gantt-tooltip");
+  if (tooltipEl) {
+    canvas.onmousemove = (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = ev.clientX - rect.left;
+      const my = ev.clientY - rect.top;
+
+      const hit = renderedRects.find(
+        (r) => mx >= r.x && mx <= r.x + r.w && my >= r.y && my <= r.y + r.h,
+      );
+
+      if (hit) {
+        const b = hit.block;
+        tooltipEl.style.display = "block";
+        tooltipEl.style.left = `${ev.pageX + 12}px`;
+        tooltipEl.style.top = `${ev.pageY - 12}px`;
+        tooltipEl.innerHTML = `
+          <strong>${escapeHtml(b.label)}</strong> (${b.size.toLocaleString()} MI)<br>
+          VM-${b.vmId} (${escapeHtml(b.vmTier)})<br>
+          Mulai: ${b.start.toFixed(2)}s &rarr; Selesai: ${b.end.toFixed(2)}s (${b.duration.toFixed(2)}s)
+        `;
+      } else {
+        tooltipEl.style.display = "none";
+      }
     };
 
-    scene.add(cat);
-    cats.push(cat);
+    canvas.onmouseleave = () => {
+      tooltipEl.style.display = "none";
+    };
   }
-
-  // Siapkan elemen mini-Gantt overlay DOM
-  initMiniGanttDom();
 }
 
-function createCatMesh(isHeftSeed) {
-  const g = new THREE.Group();
-  const baseColor = isHeftSeed ? 0xf4a261 : 0xe76f51;
-  const mat = new THREE.MeshPhongMaterial({ color: baseColor, flatShading: true });
+// ============================================================================
+// 5. VISUALISASI KURVA KONVERGENSI (4 VARIAN ABLATION)
+// ============================================================================
 
-  // Badan
-  const body = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.45, 0.45), mat);
-  body.position.set(0, 0.25, 0);
-  g.add(body);
+function renderConvergenceSection() {
+  const scenario = getActiveScenario();
+  if (!scenario || !scenario.convergence) return;
 
-  // Kepala
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.25, 8, 8), mat);
-  head.position.set(0.48, 0.45, 0);
-  g.add(head);
+  const conv = scenario.convergence;
 
-  // Telinga
-  const earMat = new THREE.MeshPhongMaterial({ color: 0xffcad4, flatShading: true });
-  const earGeo = new THREE.ConeGeometry(0.09, 0.2, 4);
-  const ear1 = new THREE.Mesh(earGeo, earMat);
-  ear1.position.set(0.45, 0.72, 0.12);
-  g.add(ear1);
-  const ear2 = new THREE.Mesh(earGeo, earMat);
-  ear2.position.set(0.45, 0.72, -0.12);
-  g.add(ear2);
+  // Delegasi jika komponen eksternal P1 (window.ConvergenceChart) terpasang
+  const externalContainer = qs("#convergence-chart-container");
+  if (
+    typeof window !== "undefined" &&
+    window.ConvergenceChart?.render &&
+    externalContainer
+  ) {
+    window.ConvergenceChart.render(externalContainer, {
+      iterations: conv.iterations,
+      series: [
+        { name: "HEFT (Baseline)", values: conv.heftBaseline },
+        { name: "CSO (Tanpa HEFT)", values: conv.cso },
+        { name: "HC-CSO tanpa IW", values: conv.hccsoNoIw },
+        { name: "HC-CSO Penuh (SMIW)", values: conv.hccso },
+      ],
+    });
+  }
 
-  // Ekor
-  const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.03, 0.6, 4), mat);
-  tail.position.set(-0.5, 0.5, 0);
-  tail.rotation.z = Math.PI / 3.5;
-  g.add(tail);
+  const canvas = qs("#convergence-canvas");
+  if (!canvas) return;
 
-  // 4 Kaki
-  const legGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.25, 4);
-  [[-0.2, 0.1, 0.15], [-0.2, 0.1, -0.15], [0.2, 0.1, 0.15], [0.2, 0.1, -0.15]].forEach(([lx, ly, lz]) => {
-    const leg = new THREE.Mesh(legGeo, mat);
-    leg.position.set(lx, ly, lz);
-    g.add(leg);
-  });
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const logicalWidth = canvas.clientWidth || 860;
+  const logicalHeight = 300;
 
-  // Mata
-  const eyeMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
-  const eyeGeo = new THREE.SphereGeometry(0.04, 4, 4);
-  const eye1 = new THREE.Mesh(eyeGeo, eyeMat);
-  eye1.position.set(0.68, 0.52, 0.09);
-  g.add(eye1);
-  const eye2 = new THREE.Mesh(eyeGeo, eyeMat);
-  eye2.position.set(0.68, 0.52, -0.09);
-  g.add(eye2);
+  canvas.width = logicalWidth * dpr;
+  canvas.height = logicalHeight * dpr;
+  canvas.style.height = `${logicalHeight}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  // Kalung bercahaya untuk Kucing HEFT
-  if (isHeftSeed) {
-    const collar = new THREE.Mesh(
-      new THREE.TorusGeometry(0.28, 0.035, 6, 12),
-      new THREE.MeshPhongMaterial({ color: 0xffd166, emissive: 0xf4a261, emissiveIntensity: 0.8 })
+  ctx.clearRect(0, 0, logicalWidth, logicalHeight);
+
+  const padLeft = 68;
+  const padRight = 28;
+  const padTop = 42;
+  const padBottom = 42;
+  const plotW = Math.max(120, logicalWidth - padLeft - padRight);
+  const plotH = logicalHeight - padTop - padBottom;
+
+  const seriesList = [
+    {
+      label: "HEFT (Baseline)",
+      data: conv.heftBaseline,
+      color: "#64748b",
+      dash: [6, 4],
+      width: 1.8,
+    },
+    {
+      label: "CSO (Tanpa HEFT)",
+      data: conv.cso,
+      color: "#f59e0b",
+      dash: [],
+      width: 2.0,
+    },
+    {
+      label: "HC-CSO tanpa IW",
+      data: conv.hccsoNoIw,
+      color: "#0ea5e9",
+      dash: [3, 3],
+      width: 2.0,
+    },
+    {
+      label: "HC-CSO Penuh (SMIW)",
+      data: conv.hccso,
+      color: "#16a34a",
+      dash: [],
+      width: 2.6,
+    },
+  ].filter((s) => Array.isArray(s.data) && s.data.length > 0);
+
+  const allVals = seriesList.flatMap((s) => s.data);
+  if (allVals.length === 0) return;
+
+  const rawMin = Math.min(...allVals);
+  const rawMax = Math.max(...allVals);
+  const span = Math.max(rawMax - rawMin, rawMax * 0.02, 0.1);
+  const yMin = Math.max(0, rawMin - span * 0.15);
+  const yMax = rawMax + span * 0.15;
+
+  // Grid & label sumbu Y
+  const yTicks = 5;
+  for (let i = 0; i <= yTicks; i++) {
+    const val = yMin + ((yMax - yMin) / yTicks) * i;
+    const y = padTop + plotH - ((val - yMin) / (yMax - yMin)) * plotH;
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.lineWidth = 1;
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(padLeft + plotW, y);
+    ctx.stroke();
+
+    ctx.fillStyle = "#475569";
+    ctx.font = "10px system-ui, sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(`${val.toFixed(1)}s`, padLeft - 8, y + 3);
+  }
+
+  // Sumbu X (Iterasi)
+  const maxIterIdx = Math.max(1, conv.iterations.length - 1);
+  const xTicks = Math.min(8, maxIterIdx);
+  for (let i = 0; i <= xTicks; i++) {
+    const iterIdx = Math.round((maxIterIdx / xTicks) * i);
+    const x = padLeft + (iterIdx / maxIterIdx) * plotW;
+
+    ctx.fillStyle = "#475569";
+    ctx.font = "10px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`Iter ${iterIdx}`, x, padTop + plotH + 18);
+  }
+
+  // Garis sumbu utama
+  ctx.beginPath();
+  ctx.strokeStyle = "#475569";
+  ctx.lineWidth = 1.4;
+  ctx.moveTo(padLeft, padTop);
+  ctx.lineTo(padLeft, padTop + plotH);
+  ctx.lineTo(padLeft + plotW, padTop + plotH);
+  ctx.stroke();
+
+  // Gambar setiap kurva
+  for (const s of seriesList) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = s.width;
+    ctx.setLineDash(s.dash);
+
+    const n = s.data.length;
+    for (let i = 0; i < n; i++) {
+      const x = padLeft + (i / Math.max(1, n - 1)) * plotW;
+      const y = padTop + plotH - ((s.data[i] - yMin) / (yMax - yMin)) * plotH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Legend horizontal di bagian atas
+  let legendX = padLeft;
+  const legendY = 18;
+  ctx.font = "11px system-ui, sans-serif";
+  ctx.textAlign = "left";
+
+  for (const s of seriesList) {
+    ctx.fillStyle = s.color;
+    ctx.fillRect(legendX, legendY - 8, 14, 4);
+    ctx.fillStyle = "#0f172a";
+    ctx.fillText(s.label, legendX + 18, legendY - 3);
+    legendX += ctx.measureText(s.label).width + 34;
+  }
+}
+
+// ============================================================================
+// 6. SANDBOX SLIDER PARAMETER INTERAKTIF (LIVE RUN DI BROWSER)
+// ============================================================================
+
+function reconstructTasksFromScenario(scenario) {
+  const blocks = scenario?.gantt?.hccso?.blocks || [];
+  const sorted = [...blocks].sort((a, b) => a.taskId - b.taskId);
+  return sorted.map((b) => ({ id: b.taskId, size: b.size }));
+}
+
+function buildBrowserGantt(assignment, tasks, vms) {
+  const nVms = vms.length;
+  const buckets = Array.from({ length: nVms }, () => []);
+  for (let t = 0; t < tasks.length; t++) {
+    buckets[assignment[t]].push(tasks[t]);
+  }
+
+  const blocks = [];
+  const vmSummaries = [];
+  let makespan = 0;
+  let totalCost = 0;
+  let sumLoad = 0;
+
+  for (let v = 0; v < nVms; v++) {
+    const queue = [...buckets[v]].sort((a, b) => b.size - a.size);
+    let cursor = 0;
+    for (const task of queue) {
+      const dur = task.size / vms[v].speed;
+      blocks.push({
+        taskId: task.id,
+        label: `T${task.id}`,
+        size: task.size,
+        vmId: v,
+        vmTier: vms[v].tier,
+        start: Number(cursor.toFixed(4)),
+        end: Number((cursor + dur).toFixed(4)),
+        duration: Number(dur.toFixed(4)),
+      });
+      cursor += dur;
+    }
+    const load = Number(cursor.toFixed(4));
+    if (load > makespan) makespan = load;
+    sumLoad += load;
+    totalCost += load * (vms[v].costPerSec || 0);
+    vmSummaries.push({
+      vmId: v,
+      name: vms[v].name || `VM-${v}`,
+      tier: vms[v].tier,
+      speed: vms[v].speed,
+      taskCount: queue.length,
+      finishTime: load,
+    });
+  }
+
+  const minLoad = Math.min(...vmSummaries.map((v) => v.finishTime));
+  const avgLoad = nVms > 0 ? sumLoad / nVms : 0;
+  const imbalance = avgLoad > 0 ? (makespan - minLoad) / avgLoad : 0;
+  const utilization =
+    makespan > 0 && nVms > 0 ? (sumLoad / (nVms * makespan)) * 100 : 0;
+
+  for (const vs of vmSummaries) {
+    vs.isBottleneck = Math.abs(vs.finishTime - makespan) < 1e-6;
+  }
+
+  return {
+    makespan: Number(makespan.toFixed(4)),
+    cost: Number(totalCost.toFixed(2)),
+    utilization: Number(utilization.toFixed(2)),
+    imbalance: Number(imbalance.toFixed(4)),
+    vmSummaries,
+    blocks,
+  };
+}
+
+function initParameterSandbox() {
+  const mrSlider = qs("#slider-mr");
+  const smpSlider = qs("#slider-smp");
+  const iwModeSelect = qs("#select-iw-mode");
+  const iwSlider = qs("#slider-iw");
+  const seedInput = qs("#input-seed");
+  const runBtn = qs("#btn-run-sim");
+  const resetBtn = qs("#btn-reset-sim");
+  const statusEl = qs("#sandbox-status");
+
+  // Sinkronkan tampilan angka slider
+  if (mrSlider) {
+    mrSlider.addEventListener("input", () =>
+      setText("#val-mr", Number(mrSlider.value).toFixed(2)),
     );
-    collar.position.set(0.38, 0.32, 0);
-    collar.rotation.y = Math.PI / 2;
-    g.add(collar);
-
-    const glowLight = new THREE.PointLight(0xffd166, 1.2, 6);
-    glowLight.position.set(0, 0.8, 0);
-    g.add(glowLight);
+  }
+  if (smpSlider) {
+    smpSlider.addEventListener("input", () =>
+      setText("#val-smp", String(smpSlider.value)),
+    );
+  }
+  if (iwSlider) {
+    iwSlider.addEventListener("input", () =>
+      setText("#val-iw", Number(iwSlider.value).toFixed(2)),
+    );
+  }
+  if (iwModeSelect && iwSlider) {
+    iwModeSelect.addEventListener("change", () => {
+      iwSlider.disabled = iwModeSelect.value !== "fixed";
+    });
   }
 
-  return g;
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      appState.liveOverride = null;
+      if (statusEl)
+        statusEl.textContent = "Menampilkan hasil benchmark default tersimpan.";
+      renderAllVisualizations();
+    });
+  }
+
+  if (!runBtn) return;
+
+  runBtn.addEventListener("click", async () => {
+    const baseScenario = getActiveScenario();
+    if (!baseScenario || !DEMO_DATA?.vms) return;
+
+    const mods = await loadSimulatorModules();
+    if (!mods.runHCCSO || !mods.heft || !mods.fitness) {
+      if (statusEl) {
+        statusEl.textContent =
+          "Simulator live tidak tersedia pada mode file statis; gunakan `npx serve` atau `python -m http.server` dari root repositori.";
+      }
+      return;
+    }
+
+    const tasks = reconstructTasksFromScenario(baseScenario);
+    const vms = DEMO_DATA.vms;
+    const seed = seedInput ? Number(seedInput.value) || 42 : 42;
+    const mr = mrSlider ? Number(mrSlider.value) : 0.3;
+    const smp = smpSlider ? Number(smpSlider.value) : 4;
+    const iwMode = iwModeSelect ? iwModeSelect.value : "smiw";
+
+    const params = {
+      popSize: 20,
+      maxIter: 60,
+      maxEvals: 1200,
+      mr,
+      smp,
+      useHeft: true,
+      useInertia: iwMode !== "none",
+    };
+
+    if (iwMode === "fixed" && iwSlider) {
+      params.inertiaWeight = Number(iwSlider.value);
+    }
+
+    if (statusEl) statusEl.textContent = "Menjalankan simulasi HC-CSO...";
+
+    const heftSol = mods.heft(tasks, vms);
+    const heftMakespan = mods.fitness(heftSol.assignment, tasks, vms);
+    const hccsoRes = mods.runHCCSO(tasks, vms, params, seed);
+    const csoRes = mods.runHCCSO(
+      tasks,
+      vms,
+      { ...params, useHeft: false },
+      seed,
+    );
+    const noIwRes = mods.runHCCSO(
+      tasks,
+      vms,
+      { ...params, useInertia: false },
+      seed,
+    );
+
+    const reductionVsHeftPct =
+      heftMakespan > 0
+        ? Number(
+            (
+              ((heftMakespan - hccsoRes.schedule.makespan) / heftMakespan) *
+              100
+            ).toFixed(2),
+          )
+        : 0;
+    const reductionVsCsoPct =
+      csoRes.schedule.makespan > 0
+        ? Number(
+            (
+              ((csoRes.schedule.makespan - hccsoRes.schedule.makespan) /
+                csoRes.schedule.makespan) *
+              100
+            ).toFixed(2),
+          )
+        : 0;
+
+    appState.liveOverride = {
+      ...baseScenario,
+      metrics: {
+        heftMakespan: Number(heftMakespan.toFixed(4)),
+        csoMakespan: Number(csoRes.schedule.makespan.toFixed(4)),
+        hccsoNoIwMakespan: Number(noIwRes.schedule.makespan.toFixed(4)),
+        hccsoMakespan: Number(hccsoRes.schedule.makespan.toFixed(4)),
+        reductionVsHeftPct,
+        reductionVsCsoPct,
+        evaluations: hccsoRes.evaluations,
+        timeMs: Number(hccsoRes.timeMs.toFixed(2)),
+      },
+      convergence: {
+        iterations: hccsoRes.history.map((_, idx) => idx),
+        heftBaseline: hccsoRes.history.map(() =>
+          Number(heftMakespan.toFixed(4)),
+        ),
+        cso: csoRes.history.map((v) => Number(v.toFixed(4))),
+        hccsoNoIw: noIwRes.history.map((v) => Number(v.toFixed(4))),
+        hccso: hccsoRes.history.map((v) => Number(v.toFixed(4))),
+      },
+      gantt: {
+        heft: buildBrowserGantt(heftSol.assignment, tasks, vms),
+        hccso: buildBrowserGantt(hccsoRes.schedule.assignment, tasks, vms),
+      },
+    };
+
+    if (statusEl) {
+      statusEl.textContent = `Selesai dalam ${fmt(hccsoRes.timeMs, 2)} ms (${hccsoRes.evaluations} evaluasi) | MR=${mr}, SMP=${smp}, IW=${iwMode.toUpperCase()}`;
+    }
+    renderAllVisualizations();
+  });
 }
 
-/* ==================== MINI-GANTT DOM OVERLAYS ==================== */
-let miniGanttEls = [];
+// ============================================================================
+// 7. ILUSTRASI ANIMASI SWARM KUCING (SEEKING VS TRACING MODE)
+// ============================================================================
 
-function initMiniGanttDom() {
-  const container = $('#gantt');
-  if (!container) return;
-  container.innerHTML = '';
-  miniGanttEls = [];
+function initCatSwarmAnimation() {
+  const canvas = qs("#cat-swarm-canvas");
+  if (!canvas) return;
 
-  for (let i = 0; i < 12; i++) {
-    const card = document.createElement('div');
-    card.className = `animal-gantt-card ${i === 0 ? 'is-heft-seed' : ''}`;
-    card.id = `mini-gantt-${i}`;
-    card.innerHTML = `
-      <div class="animal-gantt-header ${i === 0 ? 'heft-label' : ''}">
-        <span>${i === 0 ? 'HEFT' : `Kucing #${i+1}`}</span>
-      </div>
-      <div class="mini-gantt-lanes">
-        <div class="mini-lane"><span class="mini-segment s1" style="background:#e76f51; width:70%"></span></div>
-        <div class="mini-lane"><span class="mini-segment s2" style="background:#f4a261; width:55%"></span></div>
-        <div class="mini-lane"><span class="mini-segment s3" style="background:#e9c46a; width:80%"></span></div>
-      </div>
-      <div class="animal-makespan-tag" id="ms-tag-${i}">M: 95.0</div>
+  const ctx = canvas.getContext("2d");
+  const width = canvas.clientWidth || 540;
+  const height = 220;
+  canvas.width = width;
+  canvas.height = height;
+
+  const target = { x: width * 0.72, y: height * 0.45 };
+  const cats = Array.from({ length: 12 }, (_, idx) => {
+    const isTracing = idx < 4; // MR ~ 0.33
+    return {
+      id: idx,
+      isTracing,
+      baseX: 60 + (idx % 4) * 55,
+      baseY: 45 + Math.floor(idx / 4) * 60,
+      phase: idx * 0.7,
+    };
+  });
+
+  let tick = 0;
+
+  function drawFrame() {
+    tick += 0.025;
+    ctx.clearRect(0, 0, width, height);
+
+    // Latar kontur ruang pencarian
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillRect(0, 0, width, height);
+
+    // Lingkaran kontur sekitar X_best
+    for (let r = 90; r >= 25; r -= 32) {
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(22, 163, 74, 0.16)";
+      ctx.lineWidth = 1.2;
+      ctx.arc(target.x, target.y, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Titik target X_best (Solusi Terbaik Global)
+    ctx.beginPath();
+    ctx.fillStyle = "#16a34a";
+    ctx.arc(target.x, target.y, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "bold 11px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("X_best (Jadwal Terbaik)", target.x, target.y - 14);
+
+    // Gambar agen kucing
+    for (const cat of cats) {
+      let cx;
+      let cy;
+
+      if (cat.isTracing) {
+        // Tracing Mode: bergerak mendekati X_best dengan kecepatan yang meluruh (SMIW)
+        const progress = (Math.sin(tick + cat.phase) + 1) * 0.42;
+        cx = cat.baseX + (target.x - cat.baseX) * progress;
+        cy = cat.baseY + (target.y - cat.baseY) * progress;
+
+        // Vektor kecepatan menuju X_best
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(37, 99, 235, 0.45)";
+        ctx.lineWidth = 1.3;
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + (target.x - cx) * 0.22, cy + (target.y - cy) * 0.22);
+        ctx.stroke();
+
+        ctx.fillStyle = "#2563eb";
+      } else {
+        // Seeking Mode: eksplorasi lokal melingkar (SMP neighborhood)
+        cx = cat.baseX + Math.cos(tick * 1.6 + cat.phase) * 14;
+        cy = cat.baseY + Math.sin(tick * 1.6 + cat.phase) * 14;
+
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(217, 119, 6, 0.25)";
+        ctx.arc(cat.baseX, cat.baseY, 15, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = "#d97706";
+      }
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Legenda ilustrasi
+    ctx.font = "10px system-ui, sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#d97706";
+    ctx.fillRect(14, height - 22, 10, 10);
+    ctx.fillStyle = "#334155";
+    ctx.fillText("Seeking Mode (Eksplorasi Lokal SMP)", 28, height - 13);
+
+    ctx.fillStyle = "#2563eb";
+    ctx.fillRect(235, height - 22, 10, 10);
+    ctx.fillStyle = "#334155";
+    ctx.fillText("Tracing Mode (Velocity + SMIW)", 249, height - 13);
+
+    appState.swarmAnimFrameId = requestAnimationFrame(drawFrame);
+  }
+
+  if (appState.swarmAnimFrameId)
+    cancelAnimationFrame(appState.swarmAnimFrameId);
+  drawFrame();
+}
+
+// ============================================================================
+// 8. TABEL RINGKASAN EXPERIMEN ABLATION
+// ============================================================================
+
+function renderAblationTable() {
+  const tbody = qs("#ablation-table-body");
+  if (!tbody) return;
+
+  if (!DEMO_DATA?.ablation || !Array.isArray(DEMO_DATA.ablation.datasets)) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-muted">
+          Data ablation belum dimuat. Jalankan <code>node simulator/ablationHCCSO.js</code> lalu <code>node hc-cso/scripts/build-demo-data.mjs</code>.
+        </td>
+      </tr>
     `;
-    container.appendChild(card);
-    miniGanttEls.push(card);
-  }
-}
-
-/* ============================================================
-   LOGIKA TIMELINE KONTINU (0.0 s/d 1.0)
-   ============================================================ */
-
-function updateTimeline(progress) {
-  timelineTime = Math.max(0, Math.min(1, progress));
-  $('#time-slider').value = Math.round(timelineTime * 1000);
-  const currentSec = (timelineTime * TOTAL_DURATION_SEC).toFixed(1);
-  $('#timeline-time-label').textContent = `${currentSec}s`;
-
-  // Update strip alur HUD
-  const pillHeft = $('#pill-heft');
-  const pillInject = $('#pill-inject');
-  const pillMeta = $('#pill-meta');
-  const trapIndicator = $('#trap-indicator');
-
-  pillHeft?.classList.remove('active');
-  pillInject?.classList.remove('active');
-  pillMeta?.classList.remove('active');
-
-  let liveMakespan = MAKESPAN_HEFT;
-
-  if (timelineTime < 0.35) {
-    // TAHAP 1: HEFT (0.0 s/d 0.35)
-    pillHeft?.classList.add('active');
-    $('#zone-status-text').textContent = 'Zona Depan: Antrean Troli ke Kasir (HEFT)';
-    trapIndicator.style.opacity = (timelineTime > 0.12 && timelineTime < 0.28) ? '1' : '0.15';
-    liveMakespan = MAKESPAN_HEFT;
-  } else if (timelineTime < 0.55) {
-    // TAHAP 2: SUNTIK (0.35 s/d 0.55)
-    pillInject?.classList.add('active');
-    $('#zone-status-text').textContent = 'Suntik: Solusi HEFT Ditransfer ke Kucing #1 (Kalung Emas)';
-    trapIndicator.style.opacity = '0';
-    liveMakespan = MAKESPAN_HEFT;
-  } else {
-    // TAHAP 3: PERBAIKAN METAHEURISTIK (0.55 s/d 1.0)
-    pillMeta?.classList.add('active');
-    $('#zone-status-text').textContent = 'Zona Belakang: CSO (Seeking & Tracing) Memperbaiki Jadwal';
-    trapIndicator.style.opacity = '0';
-
-    const pMeta = (timelineTime - 0.55) / 0.45;
-    const targetEnd = isHeftSeedMode ? MAKESPAN_HYBRID : MAKESPAN_META_ONLY;
-    const startVal = isHeftSeedMode ? MAKESPAN_HEFT : 105.0;
-    liveMakespan = startVal - (startVal - targetEnd) * Math.pow(pMeta, 0.7);
+    return;
   }
 
-  $('#hud-makespan').textContent = liveMakespan.toFixed(1);
+  const rowsHtml = DEMO_DATA.ablation.datasets
+    .map((ds) => {
+      const s = ds.summary;
+      const heftStr = s.HEFT?.makespan?.formatted || "-";
+      const csoStr = s.CSO?.makespan?.formatted || "-";
+      const noIwStr = s["HC-CSO-no-IW"]?.makespan?.formatted || "-";
+      const hccsoStr = s["HC-CSO"]?.makespan?.formatted || "-";
+      const redPct = Number(s["HC-CSO"]?.makespanReductionVsHeftPct || 0);
+      const badgeClass = redPct > 0 ? "badge-positive" : "badge-neutral";
 
-  // Update troli HEFT
-  updateTrolleys(timelineTime);
+      return `
+        <tr>
+          <td><strong>${escapeHtml(ds.dataset)}</strong><br><small>${ds.taskCount} tasks</small></td>
+          <td>${escapeHtml(heftStr)}</td>
+          <td>${escapeHtml(csoStr)}</td>
+          <td>${escapeHtml(noIwStr)}</td>
+          <td><strong>${escapeHtml(hccsoStr)}</strong></td>
+          <td><span class="${badgeClass}">${redPct >= 0 ? "-" : "+"}${fmt(Math.abs(redPct), 2)}%</span></td>
+        </tr>
+      `;
+    })
+    .join("");
 
-  // Update hologram terbang
-  updateFlyingGantt(timelineTime);
-
-  // Update pergerakan kucing & mini-gantt
-  updateCatsAndMiniGantts(timelineTime, liveMakespan);
-
-  // Update grafik konvergensi
-  renderConvergence();
+  tbody.innerHTML = rowsHtml;
 }
 
-function updateTrolleys(t) {
-  const heftNorm = Math.min(1, t / 0.33);
+// ============================================================================
+// 9. MODUL KUIS KONSEPTUAL INTERAKTIF (3 SOAL)
+// ============================================================================
 
-  trolleyMeshes.forEach((mesh, idx) => {
-    const decision = HEFT_DECISIONS[idx];
-    const taskTreshold = idx / 8;
-    const cashier = CASHIERS[decision.vm];
+function initQuizModule() {
+  const container = qs("#quiz-container");
+  if (!container || !QUIZ_DATA?.questions) return;
 
-    const targetZ = 4.8 + (idx % 3) * 0.9;
-    const targetX = cashier.x;
+  function renderQuiz() {
+    const questionsHtml = QUIZ_DATA.questions
+      .map((q) => {
+        const selectedIdx = appState.quizAnswers[q.id];
+        const optionsHtml = q.options
+          .map((opt, idx) => {
+            const isChecked = selectedIdx === idx;
+            let stateClass = "";
+            if (appState.quizSubmitted) {
+              if (idx === q.correctIndex) stateClass = "is-correct";
+              else if (isChecked && idx !== q.correctIndex)
+                stateClass = "is-wrong";
+            }
 
-    if (heftNorm <= taskTreshold) {
-      mesh.position.copy(mesh.userData.initialPos);
-    } else {
-      const subProg = Math.min(1, (heftNorm - taskTreshold) * 7);
-      mesh.position.x = THREE.MathUtils.lerp(mesh.userData.initialPos.x, targetX, subProg);
-      mesh.position.z = THREE.MathUtils.lerp(mesh.userData.initialPos.z, targetZ, subProg);
-      mesh.position.y = Math.sin(subProg * Math.PI) * 0.4;
-    }
-  });
-}
+            return `
+              <label class="quiz-option ${stateClass}">
+                <input
+                  type="radio"
+                  name="${escapeHtml(q.id)}"
+                  value="${idx}"
+                  ${isChecked ? "checked" : ""}
+                  ${appState.quizSubmitted ? "disabled" : ""}
+                />
+                <span class="opt-key">${escapeHtml(opt.key)}.</span>
+                <span class="opt-text">${escapeHtml(opt.text)}</span>
+              </label>
+            `;
+          })
+          .join("");
 
-function updateFlyingGantt(t) {
-  const flyingEl = $('#flying-gantt');
-  if (!flyingEl || cats.length === 0) return;
+        const feedbackHtml = appState.quizSubmitted
+          ? `<div class="quiz-explanation ${
+              selectedIdx === q.correctIndex ? "feedback-ok" : "feedback-warn"
+            }">
+              <strong>${
+                selectedIdx === q.correctIndex
+                  ? "Jawaban Benar!"
+                  : `Kurang Tepat (Kunci: ${escapeHtml(q.correctKey)}).`
+              }</strong>
+              <p>${escapeHtml(q.explanation)}</p>
+            </div>`
+          : "";
 
-  if (t >= 0.35 && t <= 0.55) {
-    flyingEl.style.display = 'flex';
-    const p = (t - 0.35) / 0.20;
+        return `
+          <div class="quiz-card" data-question-id="${escapeHtml(q.id)}">
+            <div class="quiz-topic">Soal ${q.number} &bull; ${escapeHtml(q.topic)}</div>
+            <p class="quiz-question">${escapeHtml(q.question)}</p>
+            <div class="quiz-options">${optionsHtml}</div>
+            ${feedbackHtml}
+          </div>
+        `;
+      })
+      .join("");
 
-    const startPos = new THREE.Vector3(0, 1.8, 4.5);
-    const endPos = cats[0].position.clone().add(new THREE.Vector3(0, 1.2, 0));
+    container.innerHTML = questionsHtml;
 
-    const curPos = new THREE.Vector3().lerpVectors(startPos, endPos, p);
-    curPos.y += Math.sin(p * Math.PI) * 4.5;
-
-    const screenPos = curPos.project(camera);
-    const mount = $('#meta-demo');
-    const x = (screenPos.x * 0.5 + 0.5) * mount.clientWidth;
-    const y = (-screenPos.y * 0.5 + 0.5) * mount.clientHeight;
-
-    flyingEl.style.left = `${x}px`;
-    flyingEl.style.top = `${y}px`;
-    flyingEl.style.transform = `translate(-50%, -50%) scale(${1.2 - p * 0.3})`;
-  } else {
-    flyingEl.style.display = 'none';
-  }
-}
-
-function updateCatsAndMiniGantts(t, liveMakespan) {
-  const mount = $('#meta-demo');
-  if (!mount) return;
-
-  const inMetaPhase = t >= 0.55;
-  const pMeta = inMetaPhase ? (t - 0.55) / 0.45 : 0;
-  const elapsed = clock.getElapsedTime();
-
-  cats.forEach((cat, i) => {
-    const isHeft = cat.userData.isHeft;
-
-    if (inMetaPhase) {
-      // CSO Modes: Bergantian Seeking & Tracing
-      // Ganti mode tiap 3 detik
-      const currentMode = ((Math.floor(elapsed / 3.0) + i) % 2 === 0) ? 'seeking' : 'tracing';
-
-      if (currentMode === 'seeking') {
-        // Seeking Mode: Kucing duduk, menoleh kiri-kanan, mengamati sekitar
-        cat.rotation.y = Math.sin(elapsed * 3 + i) * 0.35;
-        cat.position.y = -0.5 + Math.sin(elapsed * 2 + cat.userData.bobOffset) * 0.05;
-      } else {
-        // Tracing Mode: Berlari mengejar target terbaik dengan pengaruh inertiaWeight
-        // Rendah (0.0): lurus cepat ke target. Tinggi (1.0): banyak meliuk / inersia sendiri
-        const targetPos = isHeftSeedMode ? cats[0].position : yarnBallTargetMesh.position;
-        const speed = 0.03 + (1 - inertiaWeight) * 0.04;
-        const wanderAngle = cat.userData.angle + elapsed * (inertiaWeight * 2.5);
-
-        const desireX = targetPos.x + Math.cos(wanderAngle) * (1.5 + inertiaWeight * 2.0);
-        const desireZ = targetPos.z + Math.sin(wanderAngle) * (1.5 + inertiaWeight * 2.0);
-
-        cat.position.x += (desireX - cat.position.x) * speed;
-        cat.position.z += (desireZ - cat.position.z) * speed;
-        cat.position.y = -0.5 + Math.abs(Math.sin(elapsed * 6 + i)) * 0.12; // Animasi langkah
-        cat.lookAt(targetPos.x, cat.position.y, targetPos.z);
-      }
-    } else {
-      cat.position.y = -0.5 + Math.sin(elapsed * 1.5 + cat.userData.bobOffset) * 0.05;
-    }
-
-    // Proyeksikan posisi 3D ke layer HTML Mini-Gantt
-    const tagPos = cat.position.clone().add(new THREE.Vector3(0, 1.4, 0));
-    tagPos.project(camera);
-
-    const el = miniGanttEls[i];
-    if (el) {
-      const sx = (tagPos.x * 0.5 + 0.5) * mount.clientWidth;
-      const sy = (-tagPos.y * 0.5 + 0.5) * mount.clientHeight;
-
-      el.style.left = `${sx}px`;
-      el.style.top = `${sy}px`;
-
-      if (tagPos.z > 1.0) {
-        el.style.display = 'none';
-      } else {
-        el.style.display = 'flex';
-      }
-
-      let mVal;
-      if (isHeft && isHeftSeedMode) {
-        mVal = liveMakespan;
-      } else {
-        const startOther = 99.0 + (i * 2.3);
-        const endOther = liveMakespan + (i * 1.2);
-        mVal = inMetaPhase ? THREE.MathUtils.lerp(startOther, endOther, pMeta) : startOther;
-      }
-
-      const msTag = el.querySelector(`#ms-tag-${i}`);
-      if (msTag) msTag.textContent = `M: ${mVal.toFixed(1)}`;
-
-      const b1 = el.querySelector('.s1');
-      const b2 = el.querySelector('.s2');
-      const b3 = el.querySelector('.s3');
-      if (b1 && b2 && b3) {
-        const factor = inMetaPhase ? (1 - pMeta * 0.3) : 1;
-        b1.style.width = `${Math.min(95, 62 * factor + (i % 18))}%`;
-        b2.style.width = `${Math.min(95, 72 * factor - (i % 14))}%`;
-        b3.style.width = `${Math.min(95, 68 * factor + (i % 22))}%`;
-      }
-    }
-  });
-}
-
-/* ==================== LOOP ANIMASI THREE.JS ==================== */
-function animateScene() {
-  requestAnimationFrame(animateScene);
-  const dt = clock.getDelta();
-
-  if (isPlaying) {
-    timelineTime += (dt / TOTAL_DURATION_SEC) * speedMultiplier;
-    if (timelineTime > 1.0) timelineTime = 0.0;
-    updateTimeline(timelineTime);
-  }
-
-  // Bola benang berputar perlahan
-  if (yarnBallTargetMesh) {
-    yarnBallTargetMesh.rotation.y += dt * 0.8;
-  }
-
-  renderer.render(scene, camera);
-}
-
-/* ============================================================
-   GRAFIK KONVERGENSI LIVE (SVG 3 GARIS)
-   ============================================================ */
-export function renderConvergence() {
-  const container = $('#conv-chart-svg');
-  if (!container) return;
-
-  const W = 360, H = 135, PAD_L = 34, PAD_R = 12, PAD_T = 10, PAD_B = 22;
-  const innerW = W - PAD_L - PAD_R;
-  const innerH = H - PAD_T - PAD_B;
-
-  const yMin = 45, yMax = 110;
-  const getY = val => innerH - ((val - yMin) / (yMax - yMin)) * innerH + PAD_T;
-  const getX = iter => PAD_L + (iter / 50) * innerW;
-
-  let currentIter = 0;
-  if (timelineTime >= 0.55) {
-    currentIter = Math.floor(((timelineTime - 0.55) / 0.45) * 50);
-  }
-
-  let pathHybrid = '';
-  for (let i = 0; i <= currentIter; i++) {
-    const x = getX(i);
-    const y = getY(CONV_CURVES.hybrid[i]);
-    pathHybrid += (i === 0 ? 'M' : 'L') + `${x.toFixed(1)},${y.toFixed(1)}`;
-  }
-
-  let pathMeta = '';
-  for (let i = 0; i <= currentIter; i++) {
-    const x = getX(i);
-    const y = getY(CONV_CURVES.metaOnly[i]);
-    pathMeta += (i === 0 ? 'M' : 'L') + `${x.toFixed(1)},${y.toFixed(1)}`;
-  }
-
-  const heftY = getY(MAKESPAN_HEFT);
-
-  container.innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
-      <!-- Grid & Latar -->
-      <line x1="${PAD_L}" y1="${getY(50)}" x2="${W - PAD_R}" y2="${getY(50)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <line x1="${PAD_L}" y1="${getY(70)}" x2="${W - PAD_R}" y2="${getY(70)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <line x1="${PAD_L}" y1="${getY(90)}" x2="${W - PAD_R}" y2="${getY(90)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-
-      <!-- Garis HEFT Saja -->
-      <line x1="${PAD_L}" y1="${heftY}" x2="${W - PAD_R}" y2="${heftY}"
-            stroke="#ef476f" stroke-width="1.5" stroke-dasharray="4,3"/>
-
-      <!-- Kurva CSO Saja -->
-      ${pathMeta ? `<path d="${pathMeta}" fill="none" stroke="#e76f51" stroke-width="2" stroke-linecap="round"/>` : ''}
-
-      <!-- Kurva Hybrid (HC-CSO) -->
-      ${pathHybrid ? `<path d="${pathHybrid}" fill="none" stroke="#f4a261" stroke-width="2.6" stroke-linecap="round"/>` : ''}
-
-      <!-- Sumbu Y -->
-      <text x="${PAD_L - 4}" y="${getY(100) + 3}" fill="#bda395" font-size="8" text-anchor="end">100</text>
-      <text x="${PAD_L - 4}" y="${getY(72) + 3}" fill="#ef476f" font-size="8" text-anchor="end">72</text>
-      <text x="${PAD_L - 4}" y="${getY(54.2) + 3}" fill="#f4a261" font-size="8" text-anchor="end">54</text>
-
-      <!-- Sumbu X -->
-      <text x="${PAD_L}" y="${H - 5}" fill="#bda395" font-size="8">Iter 0</text>
-      <text x="${W - PAD_R}" y="${H - 5}" fill="#bda395" font-size="8" text-anchor="end">Iter 50</text>
-    </svg>
-  `;
-}
-
-/* ============================================================
-   STUB EXPORT RENDERGANTT UNTUK KOMPATIBILITAS
-   ============================================================ */
-export function renderGantt(tab = 'heft') {
-  return tab;
-}
-
-/* ============================================================
-   KONTROL & EVENT LISTENERS
-   ============================================================ */
-export function initControls() {
-  initThree();
-
-  const playBtn = $('#btn-play-pause');
-  playBtn?.addEventListener('click', () => {
-    isPlaying = !isPlaying;
-    playBtn.textContent = isPlaying ? 'Jeda' : 'Putar';
-  });
-
-  $('#btn-restart')?.addEventListener('click', () => {
-    timelineTime = 0.0;
-    updateTimeline(0.0);
-  });
-
-  const timeSlider = $('#time-slider');
-  timeSlider?.addEventListener('input', () => {
-    isPlaying = false;
-    playBtn.textContent = 'Putar';
-    updateTimeline(timeSlider.value / 1000);
-  });
-
-  $('#pill-heft')?.addEventListener('click', () => {
-    timelineTime = 0.0;
-    updateTimeline(0.0);
-  });
-  $('#pill-inject')?.addEventListener('click', () => {
-    timelineTime = 0.36;
-    updateTimeline(0.36);
-  });
-  $('#pill-meta')?.addEventListener('click', () => {
-    timelineTime = 0.56;
-    updateTimeline(0.56);
-  });
-
-  const toggleHeft = $('#toggle-mode-heft');
-  const toggleRandom = $('#toggle-mode-random');
-
-  toggleHeft?.addEventListener('click', () => {
-    isHeftSeedMode = true;
-    toggleHeft.classList.add('active');
-    toggleRandom.classList.remove('active');
-    cats[0]?.traverse(child => {
-      if (child.isPointLight) child.intensity = 1.2;
+    // Dengarkan perubahan pilihan radio
+    qsa('input[type="radio"]', container).forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        appState.quizAnswers[e.target.name] = Number(e.target.value);
+      });
     });
-    $('#val-hybrid').textContent = MAKESPAN_HYBRID.toFixed(1);
-    updateTimeline(timelineTime);
-  });
+  }
 
-  toggleRandom?.addEventListener('click', () => {
-    isHeftSeedMode = false;
-    toggleRandom.classList.add('active');
-    toggleHeft.classList.remove('active');
-    cats[0]?.traverse(child => {
-      if (child.isPointLight) child.intensity = 0.1;
+  const submitBtn = qs("#btn-submit-quiz");
+  const resetBtn = qs("#btn-reset-quiz");
+  const scoreBanner = qs("#quiz-score-banner");
+
+  if (submitBtn) {
+    submitBtn.addEventListener("click", () => {
+      const total = QUIZ_DATA.questions.length;
+      const answeredCount = Object.keys(appState.quizAnswers).length;
+
+      if (answeredCount < total) {
+        if (scoreBanner) {
+          scoreBanner.style.display = "block";
+          scoreBanner.textContent = `Silakan jawab seluruh ${total} pertanyaan terlebih dahulu (${answeredCount}/${total} terjawab).`;
+        }
+        return;
+      }
+
+      appState.quizSubmitted = true;
+      let score = 0;
+      for (const q of QUIZ_DATA.questions) {
+        if (appState.quizAnswers[q.id] === q.correctIndex) score++;
+      }
+
+      if (scoreBanner) {
+        scoreBanner.style.display = "block";
+        const passed = score >= (QUIZ_DATA.meta?.passingScore || 2);
+        scoreBanner.innerHTML = `<strong>Skor Akhir: ${score} / ${total}</strong> — ${
+          passed
+            ? "Pemahaman konsep HC-CSO (HEFT warm-start, Seeking/Tracing, dan SMIW) sangat baik!"
+            : "Tinjau kembali pembahasan di bawah tiap soal untuk memperkuat pemahaman."
+        }`;
+      }
+
+      renderQuiz();
     });
-    $('#val-hybrid').textContent = MAKESPAN_META_ONLY.toFixed(1);
-    updateTimeline(timelineTime);
-  });
+  }
 
-  // Slider Inertia Weight (Khas HC-CSO)
-  const inertiaSlider = $('#slider-inertia');
-  const inertiaValLabel = $('#inertia-weight-val');
-  inertiaSlider?.addEventListener('input', () => {
-    inertiaWeight = parseFloat(inertiaSlider.value) / 100;
-    if (inertiaValLabel) inertiaValLabel.textContent = inertiaWeight.toFixed(2);
-  });
-
-  // Speed Multiplier
-  $$('.btn-speed').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $$('.btn-speed').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      speedMultiplier = parseFloat(btn.dataset.spd);
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      appState.quizAnswers = {};
+      appState.quizSubmitted = false;
+      if (scoreBanner) {
+        scoreBanner.style.display = "none";
+        scoreBanner.textContent = "";
+      }
+      renderQuiz();
     });
-  });
+  }
 
-  // Overlay Info / Intro
-  const introModal = $('#intro');
-  $('#btn-info')?.addEventListener('click', () => introModal?.classList.add('show'));
-  $('#btn-close-intro')?.addEventListener('click', () => introModal?.classList.remove('show'));
-  $('#btn-start-intro')?.addEventListener('click', () => introModal?.classList.remove('show'));
-
-  updateTimeline(0.0);
+  renderQuiz();
 }
 
-// Inisialisasi otomatis saat dokumen siap
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initControls);
+// ============================================================================
+// 10. ORKESTRASI INISIALISASI HALAMAN
+// ============================================================================
+
+function renderAllVisualizations() {
+  renderScenarioMetrics();
+  renderGanttSection();
+  renderConvergenceSection();
+}
+
+function initHcCsoPage() {
+  hydrateImpactCardAndBanner();
+  initScenarioControls();
+  initGanttToggleControls();
+  initParameterSandbox();
+  renderAblationTable();
+  initQuizModule();
+  renderAllVisualizations();
+  initCatSwarmAnimation();
+
+  // Responsif saat ukuran jendela berubah
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      renderGanttSection();
+      renderConvergenceSection();
+    }, 150);
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initHcCsoPage);
 } else {
-  initControls();
+  initHcCsoPage();
 }
