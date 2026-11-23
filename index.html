@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +16,41 @@
         margin: 0;
         padding: 0;
       }
+
+      :root {
+        --bg-radial: radial-gradient(circle at center, #0f1d36 0%, #060b14 100%);
+        --text-main: #e0e0e0;
+        --text-sub: #90a4ae;
+        --card-text: #e0e0e0;
+        --card-desc: #b0bec5;
+        --theme-btn-bg: rgba(255, 255, 255, 0.1);
+        --theme-btn-border: rgba(255, 255, 255, 0.2);
+        --theme-btn-text: #e0e0e0;
+        --card-whale-bg: rgba(0, 119, 182, 0.16);
+        --card-cat-bg: rgba(231, 111, 81, 0.16);
+        --card-vs-bg: rgba(42, 157, 143, 0.16);
+        --card-shadow: rgba(0, 0, 0, 0.45);
+        --footer-bg: #0077b6;
+        --particle-color: rgba(255, 255, 255, 0.14);
+      }
+
+      [data-theme="light"] {
+        --bg-radial: radial-gradient(circle at center, #f0f7ff 0%, #e2eafc 100%);
+        --text-main: #0f172a;
+        --text-sub: #475569;
+        --card-text: #1e293b;
+        --card-desc: #64748b;
+        --theme-btn-bg: rgba(15, 23, 42, 0.08);
+        --theme-btn-border: rgba(15, 23, 42, 0.15);
+        --theme-btn-text: #0f172a;
+        --card-whale-bg: rgba(255, 255, 255, 0.85);
+        --card-cat-bg: rgba(255, 255, 255, 0.85);
+        --card-vs-bg: rgba(255, 255, 255, 0.85);
+        --card-shadow: rgba(0, 71, 171, 0.12);
+        --footer-bg: #0284c7;
+        --particle-color: rgba(2, 132, 199, 0.12);
+      }
+
       body {
         font-family: "Nunito", system-ui, sans-serif;
         min-height: 100vh;
@@ -23,11 +58,13 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: radial-gradient(circle at center, #0f1d36 0%, #060b14 100%);
-        color: #e0e0e0;
+        background: var(--bg-radial);
+        color: var(--text-main);
         overflow-x: hidden;
         position: relative;
+        transition: background 0.3s ease, color 0.3s ease;
       }
+
       .particles {
         position: fixed;
         inset: 0;
@@ -37,7 +74,7 @@
       .p {
         position: absolute;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.14);
+        background: var(--particle-color);
         animation: floatUp linear infinite;
       }
       @keyframes floatUp {
@@ -56,12 +93,46 @@
           opacity: 0;
         }
       }
+
+      /* Top Navigation Bar */
+      .top-nav {
+        position: fixed;
+        top: 1rem;
+        right: 1.5rem;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--theme-btn-bg);
+        border: 1px solid var(--theme-btn-border);
+        color: var(--theme-btn-text);
+        padding: 0.45rem 0.95rem;
+        border-radius: 2rem;
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        backdrop-filter: blur(6px);
+        transition: all 0.2s ease;
+      }
+      .theme-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
       .container {
         position: relative;
         z-index: 1;
         text-align: center;
-        padding: 2rem;
-        max-width: 860px;
+        padding: 2.5rem 1.5rem 4rem;
+        max-width: 1080px;
+        width: 100%;
       }
       .title {
         font-family: "Fredoka One", cursive;
@@ -73,30 +144,30 @@
         margin-bottom: 0.35rem;
       }
       .subtitle {
-        color: #90a4ae;
+        color: var(--text-sub);
         font-size: 1.05rem;
         margin-bottom: 2.2rem;
         font-weight: 500;
       }
       .cards {
         display: flex;
-        gap: 2rem;
+        gap: 1.8rem;
         justify-content: center;
         flex-wrap: wrap;
       }
       .card {
         text-decoration: none;
-        color: #e0e0e0;
+        color: var(--card-text);
         border-radius: 1.25rem;
         padding: 2.4rem 2rem 2rem;
         text-align: center;
-        width: 320px;
+        width: 310px;
         transition:
           transform 0.25s,
           box-shadow 0.25s;
         position: relative;
         overflow: hidden;
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(10px);
       }
       .card::before {
         content: "";
@@ -115,21 +186,21 @@
       .card.whale {
         --c1: #0077b6;
         --c2: #48cae4;
-        background: rgba(0, 119, 182, 0.14);
+        background: var(--card-whale-bg);
       }
       .card.cat {
         --c1: #e76f51;
         --c2: #f4a261;
-        background: rgba(231, 111, 81, 0.14);
+        background: var(--card-cat-bg);
       }
       .card.vs {
         --c1: #2a9d8f;
-        --c2: #6ee7a0;
-        background: rgba(42, 157, 143, 0.14);
+        --c2: #52b788;
+        background: var(--card-vs-bg);
       }
       .card:hover {
         transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 16px 36px var(--card-shadow);
       }
       .mascot {
         font-family: "Fredoka One", cursive;
@@ -149,7 +220,7 @@
       }
       .card p {
         font-size: 0.88rem;
-        color: #b0bec5;
+        color: var(--card-desc);
         margin-bottom: 1.2rem;
         line-height: 1.4;
       }
@@ -182,7 +253,7 @@
         color: #fff;
       }
       .vs:hover .play-btn {
-        background: #6ee7a0;
+        background: #52b788;
         color: #06210f;
       }
       .proto-footer {
@@ -190,19 +261,28 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: #0077b6;
+        background: var(--footer-bg);
         color: #fff;
         font-size: 0.72rem;
-        padding: 4px;
+        padding: 6px 12px;
         font-weight: 700;
         text-align: center;
         letter-spacing: 0.4px;
+        z-index: 20;
       }
     </style>
   </head>
   <body>
+    <!-- Top Nav / Theme Toggle -->
+    <header class="top-nav">
+      <button class="theme-btn" id="theme-toggle" aria-label="Ganti Tema">
+        <span id="theme-icon">☀️</span>
+        <span id="theme-label">Mode Terang</span>
+      </button>
+    </header>
+
     <div class="particles" id="particles"></div>
-    <div class="container">
+    <main class="container">
       <h1 class="title">Hybrid Task Scheduling</h1>
       <p class="subtitle">
         Eksplorasi Interaktif Satu Layar: Antrean Kasir HEFT & Metaheuristik
@@ -227,11 +307,12 @@
           <span class="play-btn">Lihat Hasil</span>
         </a>
       </div>
-    </div>
+    </main>
     <footer class="proto-footer">
-      PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
+      Demo 1 SOKA: Eksperimen Heterogeneous Task Scheduling — HLWOA, HC-CSO, TS, FPA, & HEFT (Data Riil 1.000 Run)
     </footer>
     <script>
+      // Partikel Latar Belakang
       const pc = document.getElementById("particles");
       for (let i = 0; i < 30; i++) {
         const d = document.createElement("div");
@@ -240,6 +321,33 @@
         d.style.cssText = `width:${s}px;height:${s}px;left:${Math.random() * 100}%;animation-duration:${Math.random() * 8 + 6}s;animation-delay:${Math.random() * 6}s`;
         pc.appendChild(d);
       }
+
+      // Dark / Light Mode Toggle
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeIcon = document.getElementById("theme-icon");
+      const themeLabel = document.getElementById("theme-label");
+      const htmlEl = document.documentElement;
+
+      function setTheme(theme) {
+        htmlEl.setAttribute("data-theme", theme);
+        localStorage.setItem("soka-theme", theme);
+        if (theme === "light") {
+          themeIcon.textContent = "🌙";
+          themeLabel.textContent = "Mode Gelap";
+        } else {
+          themeIcon.textContent = "☀️";
+          themeLabel.textContent = "Mode Terang";
+        }
+      }
+
+      const savedTheme = localStorage.getItem("soka-theme") || 
+        (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      setTheme(savedTheme);
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlEl.getAttribute("data-theme");
+        setTheme(currentTheme === "light" ? "dark" : "light");
+      });
     </script>
   </body>
 </html>

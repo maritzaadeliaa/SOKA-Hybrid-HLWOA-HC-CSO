@@ -12,6 +12,8 @@
    TODO: ganti ke keluaran simulator P1 + hasil.json final dari P4 setelah tersedia.
    ============================================================ */
 import { DEMO } from './demo-data.js';
+import { QUIZ_HLWOA } from './quiz-data.js';
+import { initQuiz } from '../../web-components/quiz-modal.js';
 
 const PALETTE = ['#0077b6', '#0096c7', '#00b4d8', '#48cae4', '#90e0ef', '#ade8f4', '#caf0f8', '#023e8a'];
 const VM_NAMES = ['Kasir Senior', 'Kasir Reguler', 'Kasir Magang'];
@@ -747,7 +749,8 @@ export function initControls() {
 
 // Inisialisasi otomatis saat dokumen siap
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initControls);
+  document.addEventListener('DOMContentLoaded', () => { initControls(); initQuiz(QUIZ_HLWOA, { accentColor: '#48cae4' }); });
 } else {
   initControls();
+  initQuiz(QUIZ_HLWOA, { accentColor: '#48cae4' });
 }
