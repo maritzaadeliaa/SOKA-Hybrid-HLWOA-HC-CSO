@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T08:59:26.431Z",
+  "generatedAt": "2026-11-22T19:52:38.963Z",
   "description": "Laporan Statistik Komprehensif Seluruh Dataset (GoCJ & Sintetik 100-1000 tasks) untuk Demo 1 SOKA",
   "totalRunsPerMethod": 200,
   "summaryGlobal": {
@@ -50,41 +50,41 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 67.6768,
-        "std": 36.2861,
-        "median": 66.798,
-        "min": 10.733,
-        "max": 157.942,
-        "iqr": 60.306,
+        "mean": 151.0145,
+        "std": 75.5755,
+        "median": 157.757,
+        "min": 28.794,
+        "max": 280.891,
+        "iqr": 132.134,
         "count": 200
       }
     },
     "HC-CSO": {
       "makespan": {
-        "mean": 1759.8003,
-        "std": 1681.4538,
-        "median": 859.8923,
-        "min": 93.5675,
-        "max": 5451.875,
-        "iqr": 2390.8292,
+        "mean": 1759.827,
+        "std": 1681.533,
+        "median": 859.9162,
+        "min": 93.618,
+        "max": 5452.4,
+        "iqr": 2390.7917,
         "count": 200
       },
       "waiting": {
-        "mean": 853.3173,
-        "std": 818.5165,
-        "median": 419.2104,
-        "min": 38.0012,
-        "max": 2603.7216,
-        "iqr": 1186.729,
+        "mean": 853.3769,
+        "std": 818.3149,
+        "median": 419.1713,
+        "min": 38.2268,
+        "max": 2604.5981,
+        "iqr": 1186.5924,
         "count": 200
       },
       "imbalance": {
-        "mean": 0.007,
-        "std": 0.01,
-        "median": 0.0029,
+        "mean": 0.0071,
+        "std": 0.0107,
+        "median": 0.0032,
         "min": 0.0004,
-        "max": 0.0794,
-        "iqr": 0.0068,
+        "max": 0.0862,
+        "iqr": 0.007,
         "count": 200
       },
       "utilization": {
@@ -93,25 +93,25 @@
         "median": 0.9989,
         "min": 0.9859,
         "max": 0.9998,
-        "iqr": 0.0021,
+        "iqr": 0.0022,
         "count": 200
       },
       "cost": {
-        "mean": 1666314.0941,
-        "std": 1593135.193,
-        "median": 814934.9237,
-        "min": 88113.98,
-        "max": 5165409.5833,
-        "iqr": 2263977.4164,
+        "mean": 1666310.015,
+        "std": 1593113.2803,
+        "median": 814934.0508,
+        "min": 88145.9383,
+        "max": 5165430.4167,
+        "iqr": 2264193.5082,
         "count": 200
       },
       "timeMs": {
-        "mean": 10.6914,
-        "std": 5.6572,
-        "median": 9.7145,
-        "min": 2.519,
-        "max": 31.396,
-        "iqr": 8.9268,
+        "mean": 27.5741,
+        "std": 12.1206,
+        "median": 27.9,
+        "min": 6.75,
+        "max": 47.837,
+        "iqr": 21.6468,
         "count": 200
       }
     },
@@ -162,12 +162,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 8.9588,
-        "std": 5.0446,
-        "median": 8.041,
-        "min": 2.1,
-        "max": 28.823,
-        "iqr": 7.4728,
+        "mean": 23.2907,
+        "std": 10.9679,
+        "median": 22.7475,
+        "min": 5.655,
+        "max": 48.709,
+        "iqr": 20.2323,
         "count": 200
       }
     },
@@ -218,12 +218,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 18.8969,
-        "std": 10.3234,
-        "median": 18.9075,
-        "min": 3.4,
-        "max": 61.524,
-        "iqr": 15.3725,
+        "mean": 43.0835,
+        "std": 20.2207,
+        "median": 43.181,
+        "min": 9.518,
+        "max": 85.264,
+        "iqr": 33.1118,
         "count": 200
       }
     },
@@ -274,12 +274,12 @@
         "count": 200
       },
       "timeMs": {
-        "mean": 0.1245,
-        "std": 0.1556,
-        "median": 0.097,
-        "min": 0.01,
-        "max": 1.959,
-        "iqr": 0.1203,
+        "mean": 0.2361,
+        "std": 0.1511,
+        "median": 0.2195,
+        "min": 0.027,
+        "max": 0.826,
+        "iqr": 0.268,
         "count": 200
       }
     }
@@ -301,30 +301,30 @@
         },
         "methodB": {
           "label": "HC-CSO",
-          "mean": 1759.8003,
-          "std": 1681.4538,
-          "median": 859.8923,
-          "min": 93.5675,
-          "max": 5451.875,
-          "iqr": 2390.8292,
+          "mean": 1759.827,
+          "std": 1681.533,
+          "median": 859.9162,
+          "min": 93.618,
+          "max": 5452.4,
+          "iqr": 2390.7917,
           "count": 200
         },
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20840,
-          "u2": 19160,
-          "uStat": 19160,
-          "rSum1": 40940,
-          "rSum2": 39260,
-          "zScore": 0.7263,
-          "pValue": 0.467631,
+          "u1": 20705,
+          "u2": 19295,
+          "uStat": 19295,
+          "rSum1": 40805,
+          "rSum2": 39395,
+          "zScore": 0.6096,
+          "pValue": 0.542135,
           "significant": false,
-          "effectSizeR": 0.0363,
-          "rankBiserialCorr": -0.042
+          "effectSizeR": 0.0305,
+          "rankBiserialCorr": -0.0353
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik makespan (p = 0.467631 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik makespan (p = 0.542135 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
@@ -340,30 +340,30 @@
         },
         "methodB": {
           "label": "HC-CSO",
-          "mean": 1666314.0941,
-          "std": 1593135.193,
-          "median": 814934.9237,
-          "min": 88113.98,
-          "max": 5165409.5833,
-          "iqr": 2263977.4164,
+          "mean": 1666310.015,
+          "std": 1593113.2803,
+          "median": 814934.0508,
+          "min": 88145.9383,
+          "max": 5165430.4167,
+          "iqr": 2264193.5082,
           "count": 200
         },
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20080,
-          "u2": 19920,
-          "uStat": 19920,
-          "rSum1": 40180,
-          "rSum2": 40020,
-          "zScore": 0.0688,
-          "pValue": 0.945162,
+          "u1": 20150,
+          "u2": 19850,
+          "uStat": 19850,
+          "rSum1": 40250,
+          "rSum2": 39950,
+          "zScore": 0.1294,
+          "pValue": 0.897073,
           "significant": false,
-          "effectSizeR": 0.0034,
-          "rankBiserialCorr": -0.004
+          "effectSizeR": 0.0065,
+          "rankBiserialCorr": -0.0075
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik cost (p = 0.945162 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik cost (p = 0.897073 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
@@ -379,30 +379,30 @@
         },
         "methodB": {
           "label": "HC-CSO",
-          "mean": 0.007,
-          "std": 0.01,
-          "median": 0.0029,
+          "mean": 0.0071,
+          "std": 0.0107,
+          "median": 0.0032,
           "min": 0.0004,
-          "max": 0.0794,
-          "iqr": 0.0068,
+          "max": 0.0862,
+          "iqr": 0.007,
           "count": 200
         },
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20700,
-          "u2": 19300,
-          "uStat": 19300,
-          "rSum1": 40800,
-          "rSum2": 39400,
-          "zScore": 0.6056,
-          "pValue": 0.544784,
+          "u1": 20520,
+          "u2": 19480,
+          "uStat": 19480,
+          "rSum1": 40620,
+          "rSum2": 39580,
+          "zScore": 0.4498,
+          "pValue": 0.652851,
           "significant": false,
-          "effectSizeR": 0.0303,
-          "rankBiserialCorr": -0.035
+          "effectSizeR": 0.0225,
+          "rankBiserialCorr": -0.026
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik imbalance (p = 0.544784 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HLWOA dan HC-CSO pada metrik imbalance (p = 0.652851 >= 0.05)."
       }
     },
     {
@@ -531,12 +531,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 1759.8003,
-          "std": 1681.4538,
-          "median": 859.8923,
-          "min": 93.5675,
-          "max": 5451.875,
-          "iqr": 2390.8292,
+          "mean": 1759.827,
+          "std": 1681.533,
+          "median": 859.9162,
+          "min": 93.618,
+          "max": 5452.4,
+          "iqr": 2390.7917,
           "count": 200
         },
         "methodB": {
@@ -552,30 +552,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19160,
-          "u2": 20840,
-          "uStat": 19160,
-          "rSum1": 39260,
-          "rSum2": 40940,
-          "zScore": -0.7263,
-          "pValue": 0.467631,
+          "u1": 19295,
+          "u2": 20705,
+          "uStat": 19295,
+          "rSum1": 39395,
+          "rSum2": 40805,
+          "zScore": -0.6096,
+          "pValue": 0.542135,
           "significant": false,
-          "effectSizeR": 0.0363,
-          "rankBiserialCorr": 0.042
+          "effectSizeR": 0.0305,
+          "rankBiserialCorr": 0.0353
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan HEFT pada metrik makespan (p = 0.467631 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan HEFT pada metrik makespan (p = 0.542135 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 1666314.0941,
-          "std": 1593135.193,
-          "median": 814934.9237,
-          "min": 88113.98,
-          "max": 5165409.5833,
-          "iqr": 2263977.4164,
+          "mean": 1666310.015,
+          "std": 1593113.2803,
+          "median": 814934.0508,
+          "min": 88145.9383,
+          "max": 5165430.4167,
+          "iqr": 2264193.5082,
           "count": 200
         },
         "methodB": {
@@ -591,30 +591,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19920,
-          "u2": 20080,
-          "uStat": 19920,
-          "rSum1": 40020,
-          "rSum2": 40180,
-          "zScore": -0.0688,
-          "pValue": 0.945162,
+          "u1": 19850,
+          "u2": 20150,
+          "uStat": 19850,
+          "rSum1": 39950,
+          "rSum2": 40250,
+          "zScore": -0.1294,
+          "pValue": 0.897073,
           "significant": false,
-          "effectSizeR": 0.0034,
-          "rankBiserialCorr": 0.004
+          "effectSizeR": 0.0065,
+          "rankBiserialCorr": 0.0075
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan HEFT pada metrik cost (p = 0.945162 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan HEFT pada metrik cost (p = 0.897073 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 0.007,
-          "std": 0.01,
-          "median": 0.0029,
+          "mean": 0.0071,
+          "std": 0.0107,
+          "median": 0.0032,
           "min": 0.0004,
-          "max": 0.0794,
-          "iqr": 0.0068,
+          "max": 0.0862,
+          "iqr": 0.007,
           "count": 200
         },
         "methodB": {
@@ -630,19 +630,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19300,
-          "u2": 20700,
-          "uStat": 19300,
-          "rSum1": 39400,
-          "rSum2": 40800,
-          "zScore": -0.6056,
-          "pValue": 0.544784,
+          "u1": 19480,
+          "u2": 20520,
+          "uStat": 19480,
+          "rSum1": 39580,
+          "rSum2": 40620,
+          "zScore": -0.4498,
+          "pValue": 0.652851,
           "significant": false,
-          "effectSizeR": 0.0303,
-          "rankBiserialCorr": 0.035
+          "effectSizeR": 0.0225,
+          "rankBiserialCorr": 0.026
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan HEFT pada metrik imbalance (p = 0.544784 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan HEFT pada metrik imbalance (p = 0.652851 >= 0.05)."
       }
     },
     {
@@ -771,12 +771,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 1759.8003,
-          "std": 1681.4538,
-          "median": 859.8923,
-          "min": 93.5675,
-          "max": 5451.875,
-          "iqr": 2390.8292,
+          "mean": 1759.827,
+          "std": 1681.533,
+          "median": 859.9162,
+          "min": 93.618,
+          "max": 5452.4,
+          "iqr": 2390.7917,
           "count": 200
         },
         "methodB": {
@@ -792,30 +792,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19399.5,
-          "u2": 20600.5,
-          "uStat": 19399.5,
-          "rSum1": 39499.5,
-          "rSum2": 40700.5,
-          "zScore": -0.5191,
-          "pValue": 0.603717,
+          "u1": 19559.5,
+          "u2": 20440.5,
+          "uStat": 19559.5,
+          "rSum1": 39659.5,
+          "rSum2": 40540.5,
+          "zScore": -0.3807,
+          "pValue": 0.703446,
           "significant": false,
-          "effectSizeR": 0.026,
-          "rankBiserialCorr": 0.03
+          "effectSizeR": 0.019,
+          "rankBiserialCorr": 0.022
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan TS pada metrik makespan (p = 0.603717 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan TS pada metrik makespan (p = 0.703446 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 1666314.0941,
-          "std": 1593135.193,
-          "median": 814934.9237,
-          "min": 88113.98,
-          "max": 5165409.5833,
-          "iqr": 2263977.4164,
+          "mean": 1666310.015,
+          "std": 1593113.2803,
+          "median": 814934.0508,
+          "min": 88145.9383,
+          "max": 5165430.4167,
+          "iqr": 2264193.5082,
           "count": 200
         },
         "methodB": {
@@ -831,30 +831,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20011,
-          "u2": 19989,
-          "uStat": 19989,
-          "rSum1": 40111,
-          "rSum2": 40089,
-          "zScore": 0.0091,
-          "pValue": 0.992753,
+          "u1": 19974,
+          "u2": 20026,
+          "uStat": 19974,
+          "rSum1": 40074,
+          "rSum2": 40126,
+          "zScore": -0.0221,
+          "pValue": 0.982399,
           "significant": false,
-          "effectSizeR": 0.0005,
-          "rankBiserialCorr": -0.0006
+          "effectSizeR": 0.0011,
+          "rankBiserialCorr": 0.0013
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan TS pada metrik cost (p = 0.992753 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan TS pada metrik cost (p = 0.982399 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 0.007,
-          "std": 0.01,
-          "median": 0.0029,
+          "mean": 0.0071,
+          "std": 0.0107,
+          "median": 0.0032,
           "min": 0.0004,
-          "max": 0.0794,
-          "iqr": 0.0068,
+          "max": 0.0862,
+          "iqr": 0.007,
           "count": 200
         },
         "methodB": {
@@ -870,19 +870,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 19179.5,
-          "u2": 20820.5,
-          "uStat": 19179.5,
-          "rSum1": 39279.5,
-          "rSum2": 40920.5,
-          "zScore": -0.7098,
-          "pValue": 0.477831,
+          "u1": 19327,
+          "u2": 20673,
+          "uStat": 19327,
+          "rSum1": 39427,
+          "rSum2": 40773,
+          "zScore": -0.5822,
+          "pValue": 0.560454,
           "significant": false,
-          "effectSizeR": 0.0355,
-          "rankBiserialCorr": 0.041
+          "effectSizeR": 0.0291,
+          "rankBiserialCorr": 0.0336
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan TS pada metrik imbalance (p = 0.477831 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan TS pada metrik imbalance (p = 0.560454 >= 0.05)."
       }
     },
     {
@@ -1011,12 +1011,12 @@
         "metric": "makespan",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 1759.8003,
-          "std": 1681.4538,
-          "median": 859.8923,
-          "min": 93.5675,
-          "max": 5451.875,
-          "iqr": 2390.8292,
+          "mean": 1759.827,
+          "std": 1681.533,
+          "median": 859.9162,
+          "min": 93.618,
+          "max": 5452.4,
+          "iqr": 2390.7917,
           "count": 200
         },
         "methodB": {
@@ -1032,30 +1032,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20628,
-          "u2": 19372,
-          "uStat": 19372,
-          "rSum1": 40728,
-          "rSum2": 39472,
-          "zScore": 0.5428,
-          "pValue": 0.58724,
+          "u1": 20693.5,
+          "u2": 19306.5,
+          "uStat": 19306.5,
+          "rSum1": 40793.5,
+          "rSum2": 39406.5,
+          "zScore": 0.5995,
+          "pValue": 0.548861,
           "significant": false,
-          "effectSizeR": 0.0271,
-          "rankBiserialCorr": -0.0314
+          "effectSizeR": 0.03,
+          "rankBiserialCorr": -0.0347
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan FPA pada metrik makespan (p = 0.58724 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan FPA pada metrik makespan (p = 0.548861 >= 0.05)."
       },
       "cost": {
         "metric": "cost",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 1666314.0941,
-          "std": 1593135.193,
-          "median": 814934.9237,
-          "min": 88113.98,
-          "max": 5165409.5833,
-          "iqr": 2263977.4164,
+          "mean": 1666310.015,
+          "std": 1593113.2803,
+          "median": 814934.0508,
+          "min": 88145.9383,
+          "max": 5165430.4167,
+          "iqr": 2264193.5082,
           "count": 200
         },
         "methodB": {
@@ -1071,30 +1071,30 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 20269,
-          "u2": 19731,
-          "uStat": 19731,
-          "rSum1": 40369,
-          "rSum2": 39831,
-          "zScore": 0.2322,
-          "pValue": 0.816347,
+          "u1": 20159.5,
+          "u2": 19840.5,
+          "uStat": 19840.5,
+          "rSum1": 40259.5,
+          "rSum2": 39940.5,
+          "zScore": 0.1375,
+          "pValue": 0.890612,
           "significant": false,
-          "effectSizeR": 0.0116,
-          "rankBiserialCorr": -0.0134
+          "effectSizeR": 0.0069,
+          "rankBiserialCorr": -0.008
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan FPA pada metrik cost (p = 0.816347 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan FPA pada metrik cost (p = 0.890612 >= 0.05)."
       },
       "imbalance": {
         "metric": "imbalance",
         "methodA": {
           "label": "HC-CSO",
-          "mean": 0.007,
-          "std": 0.01,
-          "median": 0.0029,
+          "mean": 0.0071,
+          "std": 0.0107,
+          "median": 0.0032,
           "min": 0.0004,
-          "max": 0.0794,
-          "iqr": 0.0068,
+          "max": 0.0862,
+          "iqr": 0.007,
           "count": 200
         },
         "methodB": {
@@ -1110,19 +1110,19 @@
         "test": {
           "n1": 200,
           "n2": 200,
-          "u1": 21220,
-          "u2": 18780,
-          "uStat": 18780,
-          "rSum1": 41320,
-          "rSum2": 38880,
-          "zScore": 1.0553,
-          "pValue": 0.291278,
+          "u1": 21332.5,
+          "u2": 18667.5,
+          "uStat": 18667.5,
+          "rSum1": 41432.5,
+          "rSum2": 38767.5,
+          "zScore": 1.1526,
+          "pValue": 0.249087,
           "significant": false,
-          "effectSizeR": 0.0528,
-          "rankBiserialCorr": -0.061
+          "effectSizeR": 0.0576,
+          "rankBiserialCorr": -0.0666
         },
         "winner": "Equal / Tied",
-        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan FPA pada metrik imbalance (p = 0.291278 >= 0.05)."
+        "conclusion": "Tidak terdapat perbedaan signifikan secara statistik antara HC-CSO dan FPA pada metrik imbalance (p = 0.249087 >= 0.05)."
       }
     }
   ]

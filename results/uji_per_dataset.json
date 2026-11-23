@@ -1,0 +1,894 @@
+{
+  "alpha": 0.05,
+  "metrik": "makespan",
+  "hasil": {
+    "HC-CSO vs HLWOA": {
+      "signifikan": 18,
+      "totalDataset": 20,
+      "aLebihKecil": 18,
+      "bLebihKecil": 0,
+      "rows": [
+        {
+          "dataset": "GoCJ_100",
+          "meanA": 574.86667,
+          "meanB": 576.25,
+          "p": 0.000725,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_200",
+          "meanA": 1148.13833,
+          "meanB": 1151,
+          "p": 0.000062,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_300",
+          "meanA": 1749.56,
+          "meanB": 1750,
+          "p": 0.00583,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_400",
+          "meanA": 2185.6800000000003,
+          "meanB": 2186.2000000000003,
+          "p": 0.005415,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_500",
+          "meanA": 2734.62,
+          "meanB": 2734.7999999999997,
+          "p": 0.014286,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_600",
+          "meanA": 3464.31333,
+          "meanB": 3465,
+          "p": 0.000747,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_700",
+          "meanA": 3679.88,
+          "meanB": 3680.4000000000005,
+          "p": 0.000663,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_800",
+          "meanA": 4162.53998,
+          "meanB": 4163,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_900",
+          "meanA": 5047.58335,
+          "meanB": 5048.333299999999,
+          "p": 0.000047,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_1000",
+          "meanA": 5452.030000000001,
+          "meanB": 5452.400000000001,
+          "p": 0.005662,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_100",
+          "meanA": 93.69651999999999,
+          "meanB": 93.79870000000001,
+          "p": 0.000055,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_200",
+          "meanA": 185.67688,
+          "meanB": 185.69080000000002,
+          "p": 0.005016,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_300",
+          "meanA": 272.64732000000004,
+          "meanB": 272.68530000000004,
+          "p": 0.002086,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_400",
+          "meanA": 359.19648,
+          "meanB": 359.26470000000006,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_500",
+          "meanA": 456.58462,
+          "meanB": 456.58759999999995,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_600",
+          "meanA": 549.4179600000001,
+          "meanB": 549.4236,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_700",
+          "meanA": 635.3596000000001,
+          "meanB": 635.3608000000002,
+          "p": 0.167489,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_800",
+          "meanA": 724.8223999999999,
+          "meanB": 724.8279999999999,
+          "p": 0.001617,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_900",
+          "meanA": 806.9636899999999,
+          "meanB": 806.9746999999999,
+          "p": 0.077583,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_1000",
+          "meanA": 912.9637500000001,
+          "meanB": 912.9907999999998,
+          "p": 0.000667,
+          "signifikan": true
+        }
+      ]
+    },
+    "HC-CSO vs HEFT": {
+      "signifikan": 18,
+      "totalDataset": 20,
+      "aLebihKecil": 18,
+      "bLebihKecil": 0,
+      "rows": [
+        {
+          "dataset": "GoCJ_100",
+          "meanA": 574.86667,
+          "meanB": 576.25,
+          "p": 0.000725,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_200",
+          "meanA": 1148.13833,
+          "meanB": 1151,
+          "p": 0.000062,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_300",
+          "meanA": 1749.56,
+          "meanB": 1750,
+          "p": 0.00583,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_400",
+          "meanA": 2185.6800000000003,
+          "meanB": 2186.2000000000003,
+          "p": 0.005415,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_500",
+          "meanA": 2734.62,
+          "meanB": 2734.7999999999997,
+          "p": 0.014286,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_600",
+          "meanA": 3464.31333,
+          "meanB": 3465,
+          "p": 0.000747,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_700",
+          "meanA": 3679.88,
+          "meanB": 3680.4000000000005,
+          "p": 0.000663,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_800",
+          "meanA": 4162.53998,
+          "meanB": 4163,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_900",
+          "meanA": 5047.58335,
+          "meanB": 5048.333299999999,
+          "p": 0.000047,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_1000",
+          "meanA": 5452.030000000001,
+          "meanB": 5452.400000000001,
+          "p": 0.005662,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_100",
+          "meanA": 93.69651999999999,
+          "meanB": 93.79870000000001,
+          "p": 0.000055,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_200",
+          "meanA": 185.67688,
+          "meanB": 185.69080000000002,
+          "p": 0.005016,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_300",
+          "meanA": 272.64732000000004,
+          "meanB": 272.68530000000004,
+          "p": 0.002086,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_400",
+          "meanA": 359.19648,
+          "meanB": 359.26470000000006,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_500",
+          "meanA": 456.58462,
+          "meanB": 456.58759999999995,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_600",
+          "meanA": 549.4179600000001,
+          "meanB": 549.4236,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_700",
+          "meanA": 635.3596000000001,
+          "meanB": 635.3608000000002,
+          "p": 0.167489,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_800",
+          "meanA": 724.8223999999999,
+          "meanB": 724.8279999999999,
+          "p": 0.001617,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_900",
+          "meanA": 806.9636899999999,
+          "meanB": 806.9746999999999,
+          "p": 0.077583,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_1000",
+          "meanA": 912.9637500000001,
+          "meanB": 912.9907999999998,
+          "p": 0.000667,
+          "signifikan": true
+        }
+      ]
+    },
+    "HC-CSO vs TS": {
+      "signifikan": 9,
+      "totalDataset": 20,
+      "aLebihKecil": 9,
+      "bLebihKecil": 0,
+      "rows": [
+        {
+          "dataset": "GoCJ_100",
+          "meanA": 574.86667,
+          "meanB": 575.8599999999999,
+          "p": 0.051718,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_200",
+          "meanA": 1148.13833,
+          "meanB": 1148.94167,
+          "p": 0.009387,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_300",
+          "meanA": 1749.56,
+          "meanB": 1749.56,
+          "p": 0.430778,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_400",
+          "meanA": 2185.6800000000003,
+          "meanB": 2185.3025000000002,
+          "p": 0.161292,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_500",
+          "meanA": 2734.62,
+          "meanB": 2734.74,
+          "p": 0.151326,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_600",
+          "meanA": 3464.31333,
+          "meanB": 3464.5724999999998,
+          "p": 0.298415,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_700",
+          "meanA": 3679.88,
+          "meanB": 3680.12667,
+          "p": 0.200261,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_800",
+          "meanA": 4162.53998,
+          "meanB": 4162.81333,
+          "p": 0.051353,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_900",
+          "meanA": 5047.58335,
+          "meanB": 5048.0499899999995,
+          "p": 0.005546,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_1000",
+          "meanA": 5452.030000000001,
+          "meanB": 5452.307500000001,
+          "p": 0.042814,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_100",
+          "meanA": 93.69651999999999,
+          "meanB": 93.77697,
+          "p": 0.002663,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_200",
+          "meanA": 185.67688,
+          "meanB": 185.68848000000003,
+          "p": 0.025156,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_300",
+          "meanA": 272.64732000000004,
+          "meanB": 272.67544000000004,
+          "p": 0.031946,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_400",
+          "meanA": 359.19648,
+          "meanB": 359.2247500000001,
+          "p": 0.061926,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_500",
+          "meanA": 456.58462,
+          "meanB": 456.58759999999995,
+          "p": 0.001827,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_600",
+          "meanA": 549.4179600000001,
+          "meanB": 549.42291,
+          "p": 0.004183,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_700",
+          "meanA": 635.3596000000001,
+          "meanB": 635.3608000000002,
+          "p": 0.167489,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_800",
+          "meanA": 724.8223999999999,
+          "meanB": 724.8272,
+          "p": 0.008671,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_900",
+          "meanA": 806.9636899999999,
+          "meanB": 806.9746999999999,
+          "p": 0.077583,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_1000",
+          "meanA": 912.9637500000001,
+          "meanB": 912.97236,
+          "p": 0.105779,
+          "signifikan": false
+        }
+      ]
+    },
+    "FPA vs HC-CSO": {
+      "signifikan": 15,
+      "totalDataset": 20,
+      "aLebihKecil": 15,
+      "bLebihKecil": 0,
+      "rows": [
+        {
+          "dataset": "GoCJ_100",
+          "meanA": 575.35833,
+          "meanB": 574.86667,
+          "p": 0.192084,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_200",
+          "meanA": 1147.11833,
+          "meanB": 1148.13833,
+          "p": 0.000624,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_300",
+          "meanA": 1748.7,
+          "meanB": 1749.56,
+          "p": 0.238364,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_400",
+          "meanA": 2185.48,
+          "meanB": 2185.6800000000003,
+          "p": 0.967435,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_500",
+          "meanA": 2733.5374899999997,
+          "meanB": 2734.62,
+          "p": 0.000147,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_600",
+          "meanA": 3462.97,
+          "meanB": 3464.31333,
+          "p": 0.00154,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_700",
+          "meanA": 3678.7533299999996,
+          "meanB": 3679.88,
+          "p": 0.002614,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_800",
+          "meanA": 4162.46664,
+          "meanB": 4162.53998,
+          "p": 0.422907,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_900",
+          "meanA": 5047.5,
+          "meanB": 5047.58335,
+          "p": 0.013653,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_1000",
+          "meanA": 5450.413340000001,
+          "meanB": 5452.030000000001,
+          "p": 0.000192,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_100",
+          "meanA": 93.49105,
+          "meanB": 93.69651999999999,
+          "p": 0.000161,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_200",
+          "meanA": 185.60228999999998,
+          "meanB": 185.67688,
+          "p": 0.00031,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_300",
+          "meanA": 272.59929999999997,
+          "meanB": 272.64732000000004,
+          "p": 0.001367,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_400",
+          "meanA": 359.15202,
+          "meanB": 359.19648,
+          "p": 0.10385,
+          "signifikan": false
+        },
+        {
+          "dataset": "Synthetic_500",
+          "meanA": 456.5541999999999,
+          "meanB": 456.58462,
+          "p": 0.000129,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_600",
+          "meanA": 549.38676,
+          "meanB": 549.4179600000001,
+          "p": 0.003262,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_700",
+          "meanA": 635.32493,
+          "meanB": 635.3596000000001,
+          "p": 0.000101,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_800",
+          "meanA": 724.7922100000002,
+          "meanB": 724.8223999999999,
+          "p": 0.000124,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_900",
+          "meanA": 806.93514,
+          "meanB": 806.9636899999999,
+          "p": 0.005989,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_1000",
+          "meanA": 912.77109,
+          "meanB": 912.9637500000001,
+          "p": 0.000219,
+          "signifikan": true
+        }
+      ]
+    },
+    "FPA vs HLWOA": {
+      "signifikan": 20,
+      "totalDataset": 20,
+      "aLebihKecil": 20,
+      "bLebihKecil": 0,
+      "rows": [
+        {
+          "dataset": "GoCJ_100",
+          "meanA": 575.35833,
+          "meanB": 576.25,
+          "p": 0.014286,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_200",
+          "meanA": 1147.11833,
+          "meanB": 1151,
+          "p": 0.000049,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_300",
+          "meanA": 1748.7,
+          "meanB": 1750,
+          "p": 0.00583,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_400",
+          "meanA": 2185.48,
+          "meanB": 2186.2000000000003,
+          "p": 0.034703,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_500",
+          "meanA": 2733.5374899999997,
+          "meanB": 2734.7999999999997,
+          "p": 0.00006,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_600",
+          "meanA": 3462.97,
+          "meanB": 3465,
+          "p": 0.000055,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_700",
+          "meanA": 3678.7533299999996,
+          "meanB": 3680.4000000000005,
+          "p": 0.000061,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_800",
+          "meanA": 4162.46664,
+          "meanB": 4163,
+          "p": 0.000441,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_900",
+          "meanA": 5047.5,
+          "meanB": 5048.333299999999,
+          "p": 0.000016,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_1000",
+          "meanA": 5450.413340000001,
+          "meanB": 5452.400000000001,
+          "p": 0.000055,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_100",
+          "meanA": 93.49105,
+          "meanB": 93.79870000000001,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_200",
+          "meanA": 185.60228999999998,
+          "meanB": 185.69080000000002,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_300",
+          "meanA": 272.59929999999997,
+          "meanB": 272.68530000000004,
+          "p": 0.000058,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_400",
+          "meanA": 359.15202,
+          "meanB": 359.26470000000006,
+          "p": 0.000064,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_500",
+          "meanA": 456.5541999999999,
+          "meanB": 456.58759999999995,
+          "p": 0.000055,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_600",
+          "meanA": 549.38676,
+          "meanB": 549.4236,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_700",
+          "meanA": 635.32493,
+          "meanB": 635.3608000000002,
+          "p": 0.000058,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_800",
+          "meanA": 724.7922100000002,
+          "meanB": 724.8279999999999,
+          "p": 0.000061,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_900",
+          "meanA": 806.93514,
+          "meanB": 806.9746999999999,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_1000",
+          "meanA": 912.77109,
+          "meanB": 912.9907999999998,
+          "p": 0.000064,
+          "signifikan": true
+        }
+      ]
+    },
+    "FPA vs TS": {
+      "signifikan": 17,
+      "totalDataset": 20,
+      "aLebihKecil": 17,
+      "bLebihKecil": 0,
+      "rows": [
+        {
+          "dataset": "GoCJ_100",
+          "meanA": 575.35833,
+          "meanB": 575.8599999999999,
+          "p": 0.624358,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_200",
+          "meanA": 1147.11833,
+          "meanB": 1148.94167,
+          "p": 0.000138,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_300",
+          "meanA": 1748.7,
+          "meanB": 1749.56,
+          "p": 0.096277,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_400",
+          "meanA": 2185.48,
+          "meanB": 2185.3025000000002,
+          "p": 0.327386,
+          "signifikan": false
+        },
+        {
+          "dataset": "GoCJ_500",
+          "meanA": 2733.5374899999997,
+          "meanB": 2734.74,
+          "p": 0.000105,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_600",
+          "meanA": 3462.97,
+          "meanB": 3464.5724999999998,
+          "p": 0.000649,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_700",
+          "meanA": 3678.7533299999996,
+          "meanB": 3680.12667,
+          "p": 0.000555,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_800",
+          "meanA": 4162.46664,
+          "meanB": 4162.81333,
+          "p": 0.009656,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_900",
+          "meanA": 5047.5,
+          "meanB": 5048.0499899999995,
+          "p": 0.000178,
+          "signifikan": true
+        },
+        {
+          "dataset": "GoCJ_1000",
+          "meanA": 5450.413340000001,
+          "meanB": 5452.307500000001,
+          "p": 0.000097,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_100",
+          "meanA": 93.49105,
+          "meanB": 93.77697,
+          "p": 0.00013,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_200",
+          "meanA": 185.60228999999998,
+          "meanB": 185.68848000000003,
+          "p": 0.000102,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_300",
+          "meanA": 272.59929999999997,
+          "meanB": 272.67544000000004,
+          "p": 0.000101,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_400",
+          "meanA": 359.15202,
+          "meanB": 359.2247500000001,
+          "p": 0.008824,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_500",
+          "meanA": 456.5541999999999,
+          "meanB": 456.58759999999995,
+          "p": 0.000055,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_600",
+          "meanA": 549.38676,
+          "meanB": 549.42291,
+          "p": 0.00012,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_700",
+          "meanA": 635.32493,
+          "meanB": 635.3608000000002,
+          "p": 0.000058,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_800",
+          "meanA": 724.7922100000002,
+          "meanB": 724.8272,
+          "p": 0.000084,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_900",
+          "meanA": 806.93514,
+          "meanB": 806.9746999999999,
+          "p": 0.000063,
+          "signifikan": true
+        },
+        {
+          "dataset": "Synthetic_1000",
+          "meanA": 912.77109,
+          "meanB": 912.97236,
+          "p": 0.000268,
+          "signifikan": true
+        }
+      ]
+    }
+  }
+}

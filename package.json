@@ -10,7 +10,8 @@
     "test:tahap3": "node tests/test_tahap3.js",
     "test:tahap4": "node tests/test_tahap4.js",
     "export": "node simulator/exportResults.js",
-    "stats": "node simulator/statisticalReport.js"
+    "stats": "node simulator/statisticalReport.js",
+    "stats:dataset": "node simulator/perDatasetTest.js"
   },
   "keywords": [
     "task-scheduling",

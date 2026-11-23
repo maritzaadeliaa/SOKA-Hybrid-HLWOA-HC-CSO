@@ -1,144 +1,245 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SOKA — Hybrid Task Scheduling (Satu Layar Terpadu)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Nunito', system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at center, #0f1d36 0%, #060b14 100%);
-      color: #e0e0e0;
-      overflow: hidden;
-      position: relative;
-    }
-    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    .p { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.14); animation: floatUp linear infinite; }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(0); opacity: 0; }
-      15% { opacity: 1; }
-      85% { opacity: 0.6; }
-      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-    }
-    .container { position: relative; z-index: 1; text-align: center; padding: 2rem; max-width: 860px; }
-    .title {
-      font-family: 'Fredoka One', cursive;
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
-      background: linear-gradient(90deg, #48cae4, #f4a261);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.35rem;
-    }
-    .subtitle {
-      color: #90a4ae;
-      font-size: 1.05rem;
-      margin-bottom: 2.2rem;
-      font-weight: 500;
-    }
-    .cards {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .card {
-      text-decoration: none;
-      color: #e0e0e0;
-      border-radius: 1.25rem;
-      padding: 2.4rem 2rem 2rem;
-      text-align: center;
-      width: 320px;
-      transition: transform 0.25s, box-shadow 0.25s;
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 1.25rem;
-      padding: 2px;
-      background: linear-gradient(135deg, var(--c1), var(--c2));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-    .card.whale { --c1: #0077b6; --c2: #48cae4; background: rgba(0, 119, 182, 0.14); }
-    .card.cat   { --c1: #e76f51; --c2: #f4a261; background: rgba(231, 111, 81, 0.14); }
-    .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 16px 36px rgba(0,0,0,0.45); }
-    .mascot { font-family: 'Fredoka One', cursive; font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 0.8rem; color: var(--c2); transition: transform 0.3s; }
-    .card:hover .mascot { transform: scale(1.1); }
-    .card h2 { font-family: 'Fredoka One', cursive; font-size: 1.55rem; margin-bottom: 0.3rem; }
-    .card p { font-size: 0.88rem; color: #b0bec5; margin-bottom: 1.2rem; line-height: 1.4; }
-    .play-btn {
-      display: inline-block;
-      padding: 0.6rem 1.6rem;
-      border-radius: 2rem;
-      font-weight: 800;
-      font-size: 0.92rem;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .whale .play-btn { background: #0077b6; color: #fff; }
-    .whale:hover .play-btn { background: #00b4d8; }
-    .cat .play-btn { background: #e76f51; color: #fff; }
-    .cat:hover .play-btn { background: #f4a261; }
-    .proto-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #0077b6;
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 4px;
-      font-weight: 700;
-      text-align: center;
-      letter-spacing: 0.4px;
-    }
-  </style>
-</head>
-<body>
-  <div class="particles" id="particles"></div>
-  <div class="container">
-    <h1 class="title">Hybrid Task Scheduling</h1>
-    <p class="subtitle">Eksplorasi Interaktif Satu Layar: Antrean Kasir HEFT & Metaheuristik</p>
-    <div class="cards">
-      <a class="card whale" href="hlwoa/index.html">
-        <div class="mascot">HLWOA</div>
-        <h2>HLWOA</h2>
-        <p>HEFT + Whale Optimization Algorithm + Lévy Flight</p>
-        <span class="play-btn">Buka Satu Layar</span>
-      </a>
-      <a class="card cat" href="hc-cso/index.html">
-        <div class="mascot">HC-CSO</div>
-        <h2>HC-CSO</h2>
-        <p>HEFT + Cat Swarm Optimization (Seeking & Tracing)</p>
-        <span class="play-btn">Buka Satu Layar</span>
-      </a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOKA — Hybrid Task Scheduling (Satu Layar Terpadu)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Nunito", system-ui, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at center, #0f1d36 0%, #060b14 100%);
+        color: #e0e0e0;
+        overflow-x: hidden;
+        position: relative;
+      }
+      .particles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .p {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        animation: floatUp linear infinite;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) scale(0);
+          opacity: 0;
+        }
+        15% {
+          opacity: 1;
+        }
+        85% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-10vh) scale(1);
+          opacity: 0;
+        }
+      }
+      .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 2rem;
+        max-width: 860px;
+      }
+      .title {
+        font-family: "Fredoka One", cursive;
+        font-size: clamp(2.2rem, 5vw, 3.4rem);
+        background: linear-gradient(90deg, #48cae4, #f4a261);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.35rem;
+      }
+      .subtitle {
+        color: #90a4ae;
+        font-size: 1.05rem;
+        margin-bottom: 2.2rem;
+        font-weight: 500;
+      }
+      .cards {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .card {
+        text-decoration: none;
+        color: #e0e0e0;
+        border-radius: 1.25rem;
+        padding: 2.4rem 2rem 2rem;
+        text-align: center;
+        width: 320px;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(8px);
+      }
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 1.25rem;
+        padding: 2px;
+        background: linear-gradient(135deg, var(--c1), var(--c2));
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      .card.whale {
+        --c1: #0077b6;
+        --c2: #48cae4;
+        background: rgba(0, 119, 182, 0.14);
+      }
+      .card.cat {
+        --c1: #e76f51;
+        --c2: #f4a261;
+        background: rgba(231, 111, 81, 0.14);
+      }
+      .card.vs {
+        --c1: #2a9d8f;
+        --c2: #6ee7a0;
+        background: rgba(42, 157, 143, 0.14);
+      }
+      .card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+      }
+      .mascot {
+        font-family: "Fredoka One", cursive;
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+        margin-bottom: 0.8rem;
+        color: var(--c2);
+        transition: transform 0.3s;
+      }
+      .card:hover .mascot {
+        transform: scale(1.1);
+      }
+      .card h2 {
+        font-family: "Fredoka One", cursive;
+        font-size: 1.55rem;
+        margin-bottom: 0.3rem;
+      }
+      .card p {
+        font-size: 0.88rem;
+        color: #b0bec5;
+        margin-bottom: 1.2rem;
+        line-height: 1.4;
+      }
+      .play-btn {
+        display: inline-block;
+        padding: 0.6rem 1.6rem;
+        border-radius: 2rem;
+        font-weight: 800;
+        font-size: 0.92rem;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .whale .play-btn {
+        background: #0077b6;
+        color: #fff;
+      }
+      .whale:hover .play-btn {
+        background: #00b4d8;
+      }
+      .cat .play-btn {
+        background: #e76f51;
+        color: #fff;
+      }
+      .cat:hover .play-btn {
+        background: #f4a261;
+      }
+      .vs .play-btn {
+        background: #2a9d8f;
+        color: #fff;
+      }
+      .vs:hover .play-btn {
+        background: #6ee7a0;
+        color: #06210f;
+      }
+      .proto-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #0077b6;
+        color: #fff;
+        font-size: 0.72rem;
+        padding: 4px;
+        font-weight: 700;
+        text-align: center;
+        letter-spacing: 0.4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="particles" id="particles"></div>
+    <div class="container">
+      <h1 class="title">Hybrid Task Scheduling</h1>
+      <p class="subtitle">
+        Eksplorasi Interaktif Satu Layar: Antrean Kasir HEFT & Metaheuristik
+      </p>
+      <div class="cards">
+        <a class="card whale" href="hlwoa/index.html">
+          <div class="mascot">HLWOA</div>
+          <h2>HLWOA</h2>
+          <p>HEFT + Whale Optimization Algorithm + Lévy Flight</p>
+          <span class="play-btn">Buka Satu Layar</span>
+        </a>
+        <a class="card cat" href="hc-cso/index.html">
+          <div class="mascot">HC-CSO</div>
+          <h2>HC-CSO</h2>
+          <p>HEFT + Cat Swarm Optimization (Seeking & Tracing)</p>
+          <span class="play-btn">Buka Satu Layar</span>
+        </a>
+        <a class="card vs" href="perbandingan/index.html">
+          <div class="mascot">VS</div>
+          <h2>Perbandingan</h2>
+          <p>Hasil HLWOA, HC-CSO, TS, FPA, dan HEFT dari 1.000 run</p>
+          <span class="play-btn">Lihat Hasil</span>
+        </a>
+      </div>
     </div>
-  </div>
-  <footer class="proto-footer">
-    PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
-  </footer>
-  <script>
-    const pc = document.getElementById('particles');
-    for (let i = 0; i < 30; i++) {
-      const d = document.createElement('div');
-      d.className = 'p';
-      const s = Math.random() * 4 + 2;
-      d.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*6}s`;
-      pc.appendChild(d);
-    }
-  </script>
-</body>
+    <footer class="proto-footer">
+      PROTOTIPE TAMPILAN: data tiruan, bukan hasil algoritma sungguhan.
+    </footer>
+    <script>
+      const pc = document.getElementById("particles");
+      for (let i = 0; i < 30; i++) {
+        const d = document.createElement("div");
+        d.className = "p";
+        const s = Math.random() * 4 + 2;
+        d.style.cssText = `width:${s}px;height:${s}px;left:${Math.random() * 100}%;animation-duration:${Math.random() * 8 + 6}s;animation-delay:${Math.random() * 6}s`;
+        pc.appendChild(d);
+      }
+    </script>
+  </body>
 </html>

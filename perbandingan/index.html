@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOKA — Perbandingan Metode</title>
+    <style>
+      :root {
+        --bg: #060b14;
+        --card: #0f1d36;
+        --line: #22344f;
+        --txt: #e0e0e0;
+        --mut: #8fa3bf;
+        --hl: #48cae4;
+        --cs: #f4a261;
+        --ts: #a78bfa;
+        --fp: #6ee7a0;
+        --he: #94a3b8;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--txt);
+        padding: 24px 16px 48px;
+      }
+      main {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      a.back {
+        color: var(--hl);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+        margin: 12px 0 4px;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 0 0 12px;
+      }
+      p.sub {
+        color: var(--mut);
+        margin-bottom: 20px;
+      }
+      section {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+      select {
+        background: var(--bg);
+        color: var(--txt);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 1rem;
+        margin-bottom: 14px;
+      }
+      .scroll {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        min-width: 640px;
+      }
+      th,
+      td {
+        padding: 8px 10px;
+        text-align: right;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      th:first-child,
+      td:first-child {
+        text-align: left;
+      }
+      th {
+        color: var(--mut);
+        font-weight: 600;
+      }
+      td.best {
+        color: #6ee7a0;
+        font-weight: 700;
+      }
+      .bars {
+        display: grid;
+        gap: 8px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 110px 1fr 90px;
+        gap: 10px;
+        align-items: center;
+        font-size: 0.9rem;
+      }
+      .track {
+        background: var(--bg);
+        border-radius: 6px;
+        height: 20px;
+        overflow: hidden;
+      }
+      .fill {
+        height: 100%;
+        border-radius: 6px;
+      }
+      .row span:last-child {
+        text-align: right;
+        color: var(--mut);
+      }
+      .note {
+        color: var(--mut);
+        font-size: 0.85rem;
+        margin-top: 10px;
+        line-height: 1.5;
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+      .kpi {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .kpi b {
+        display: block;
+        font-size: 1.4rem;
+        margin-top: 4px;
+      }
+      .err {
+        color: #f87171;
+      }
+      @media (max-width: 560px) {
+        .row {
+          grid-template-columns: 80px 1fr 70px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="../index.html">← Kembali</a>
+      <h1>Perbandingan Metode</h1>
+      <p class="sub">
+        HLWOA, HC-CSO, Tabu Search, FPA, dan HEFT. 10 seed per dataset, anggaran
+        1.200 evaluasi fitness.
+      </p>
+      <div id="status" class="note">Memuat data...</div>
+
+      <section>
+        <h2>Hasil per dataset</h2>
+        <select id="ds"></select>
+        <div class="scroll"><table id="tbl"></table></div>
+        <p class="note">
+          Hijau menandai nilai terbaik di kolom (makespan, waiting, imbalance,
+          cost, waktu: terkecil, utilization: terbesar)
+        </p>
+      </section>
+
+      <section>
+        <h2>Selisih makespan terhadap HEFT (seluruh dataset)</h2>
+        <div class="bars" id="rel"></div>
+        <p class="note">
+          Makespan tiap run dibagi rata-rata HEFT pada dataset yang sama, lalu
+          dirata-rata. Negatif berarti lebih cepat dari HEFT. Selisihnya sangat
+          kecil, jadi tampilkan sebagai persen
+        </p>
+      </section>
+
+      <section>
+        <h2>Waktu scheduler</h2>
+        <div class="bars" id="time"></div>
+        <p class="note">
+          Rata-rata waktu komputasi solver (ms) pada seluruh run
+        </p>
+      </section>
+
+      <section>
+        <h2>Jumlah dataset dengan makespan terbaik</h2>
+        <div class="kpis" id="wins"></div>
+        <p class="note">
+          Dihitung dari rata-rata 10 seed per dataset, nilai imbang dihitung
+          untuk semua metode yang sama
+        </p>
+      </section>
+
+      <section>
+        <h2>Ablation</h2>
+        <div class="scroll"><table id="abl"></table></div>
+        <p class="note" id="ablnote"></p>
+      </section>
+    </main>
+
+    <script>
+      const M = ["HLWOA", "HC-CSO", "TS", "FPA", "HEFT"];
+      const COL = {
+        HLWOA: "var(--hl)",
+        "HC-CSO": "var(--cs)",
+        TS: "var(--ts)",
+        FPA: "var(--fp)",
+        HEFT: "var(--he)",
+        WOA: "#38bdf8",
+        "HLWOA-noLevy": "#0ea5e9",
+        CSO: "#fbbf24",
+        "HC-CSO-noIW": "#fb923c",
+      };
+      const mean = (a) => a.reduce((s, x) => s + x, 0) / a.length;
+      const sd = (a) => {
+        if (a.length < 2) return 0;
+        const m = mean(a);
+        return Math.sqrt(
+          a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1),
+        );
+      };
+      const ds = (h, m, d) => h[m].filter((r) => r.dataset === d);
+      const f = (x, n = 2) =>
+        x.toLocaleString("id-ID", {
+          minimumFractionDigits: n,
+          maximumFractionDigits: n,
+        });
+
+      async function get(u) {
+        const r = await fetch(u);
+        if (!r.ok) throw new Error(u + " " + r.status);
+        return r.json();
+      }
+
+      function table(h, d) {
+        const keys = [
+          ["makespan", "Makespan (s)", 2, -1],
+          ["waiting", "Waiting (s)", 2, -1],
+          ["imbalance", "Imbalance", 4, -1],
+          ["utilization", "Utilization", 4, 1],
+          ["cost", "Cost", 0, -1],
+          ["timeMs", "Waktu (ms)", 2, -1],
+        ];
+        const stat = M.map((m) =>
+          Object.fromEntries(
+            keys.map((k) => [k[0], ds(h, m, d).map((r) => r[k[0]])]),
+          ),
+        );
+        const best = keys.map((k) => {
+          const v = stat.map((s) => mean(s[k[0]]));
+          return k[3] < 0 ? Math.min(...v) : Math.max(...v);
+        });
+        let html =
+          "<tr><th>Metode</th>" +
+          keys.map((k) => `<th>${k[1]}</th>`).join("") +
+          "</tr>";
+        M.forEach((m, i) => {
+          html +=
+            `<tr><td><b style="color:${COL[m]}">${m}</b></td>` +
+            keys
+              .map((k, j) => {
+                const v = stat[i][k[0]],
+                  mu = mean(v);
+                const cls =
+                  Math.abs(mu - best[j]) < 1e-9 ? ' class="best"' : "";
+                return `<td${cls}>${f(mu, k[2])} ± ${f(sd(v), k[2])}</td>`;
+              })
+              .join("") +
+            "</tr>";
+        });
+        document.getElementById("tbl").innerHTML = html;
+      }
+
+      function bars(id, items, fmt) {
+        const max = Math.max(...items.map((i) => Math.abs(i.v)), 1e-12);
+        document.getElementById(id).innerHTML = items
+          .map(
+            (i) => `
+    <div class="row"><span style="color:${COL[i.k]}">${i.k}</span>
+    <div class="track"><div class="fill" style="width:${Math.max(2, (Math.abs(i.v) / max) * 100)}%;background:${COL[i.k]}"></div></div>
+    <span>${fmt(i.v)}</span></div>`,
+          )
+          .join("");
+      }
+
+      function rel(h, dsets) {
+        const hm = Object.fromEntries(
+          dsets.map((d) => [d, mean(ds(h, "HEFT", d).map((r) => r.makespan))]),
+        );
+        bars(
+          "rel",
+          M.map((m) => ({
+            k: m,
+            v: (mean(h[m].map((r) => r.makespan / hm[r.dataset])) - 1) * 100,
+          })),
+          (v) => f(v, 4) + "%",
+        );
+      }
+
+      function wins(h, dsets) {
+        const w = Object.fromEntries(M.map((m) => [m, 0]));
+        dsets.forEach((d) => {
+          const v = M.map((m) => mean(ds(h, m, d).map((r) => r.makespan))),
+            mn = Math.min(...v);
+          M.forEach((m, i) => {
+            if (Math.abs(v[i] - mn) < 1e-6) w[m]++;
+          });
+        });
+        document.getElementById("wins").innerHTML = M.map(
+          (m) =>
+            `<div class="kpi"><span style="color:${COL[m]}">${m}</span><b>${w[m]} / ${dsets.length}</b></div>`,
+        ).join("");
+      }
+
+      function ablation(a, h) {
+        const dsets = [...new Set(h.HEFT.map((r) => r.dataset))];
+        const hm = Object.fromEntries(
+          dsets.map((d) => [d, mean(ds(h, "HEFT", d).map((r) => r.makespan))]),
+        );
+        const groups = [
+          ["Ablation HLWOA", ["WOA", "HLWOA-noLevy", "HLWOA"]],
+          ["Ablation HC-CSO", ["CSO", "HC-CSO-noIW", "HC-CSO"]],
+        ];
+        const rel = (n) => mean(a[n].map((x) => x.makespan / hm[x.dataset]));
+        let html =
+          "<tr><th>Varian</th><th>Makespan / HEFT</th><th>Waktu (ms)</th><th>Imbalance</th></tr>";
+        groups.forEach(([title, names]) => {
+          html += `<tr><td colspan="4" style="color:var(--mut);text-align:left;padding-top:14px">${title}</td></tr>`;
+          names.forEach((n) => {
+            if (!a[n]) return;
+            const r = a[n].map((x) => x.makespan / hm[x.dataset]);
+            html += `<tr><td><b style="color:${COL[n]}">${n}</b></td><td>${f(mean(r), 6)} ± ${f(sd(r), 6)}</td><td>${f(mean(a[n].map((x) => x.timeMs)), 2)}</td><td>${f(mean(a[n].map((x) => x.imbalance)), 4)}</td></tr>`;
+          });
+        });
+        document.getElementById("abl").innerHTML = html;
+        const t = [];
+        if (a.WOA && a.HLWOA)
+          t.push(
+            `HLWOA: WOA saja ${f((rel("WOA") - 1) * 100, 1)}% lebih lambat dari HEFT, sedangkan HLWOA ${f((rel("HLWOA") - 1) * 100, 4)}% terhadap HEFT, jadi peran HEFT sebagai solusi awal dominan`,
+          );
+        if (a.CSO && a["HC-CSO"])
+          t.push(
+            `HC-CSO: CSO saja ${f((rel("CSO") - 1) * 100, 1)}% lebih lambat dari HEFT, sedangkan HC-CSO ${f((rel("HC-CSO") - 1) * 100, 4)}% terhadap HEFT. HC-CSO tanpa inertia weight ${f((rel("HC-CSO-noIW") - 1) * 100, 4)}%, jadi inertia weight hampir tidak berpengaruh`,
+          );
+        document.getElementById("ablnote").textContent =
+          "Nilai 1,000000 berarti sama dengan HEFT. " + t.join(". ");
+      }
+
+      (async () => {
+        const st = document.getElementById("status");
+        try {
+          const h = await get("../results/hasil.json");
+          const dsets = [...new Set(h.HEFT.map((r) => r.dataset))];
+          const sel = document.getElementById("ds");
+          sel.innerHTML = dsets.map((d) => `<option>${d}</option>`).join("");
+          sel.onchange = () => table(h, sel.value);
+          table(h, dsets[0]);
+          rel(h, dsets);
+          wins(h, dsets);
+          bars(
+            "time",
+            M.map((m) => ({ k: m, v: mean(h[m].map((r) => r.timeMs)) })),
+            (v) => f(v, 2) + " ms",
+          );
+          try {
+            ablation(await get("../results/hasil_ablation.json"), h);
+          } catch (e) {
+            document.getElementById("abl").innerHTML = "";
+            document.getElementById("ablnote").textContent =
+              "hasil_ablation.json belum ada, jalankan npm run export";
+          }
+          st.remove();
+        } catch (e) {
+          st.className = "note err";
+          st.textContent =
+            "Gagal memuat data: " +
+            e.message +
+            ". Buka lewat server lokal (npx serve .), jangan klik dua kali file HTML-nya";
+        }
+      })();
+    </script>
+  </body>
+</html>
